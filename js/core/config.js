@@ -28,15 +28,13 @@ Game.Config = {
         // The seam, paced by how far the run has climbed rather than by how
         // long it has lasted: once the best number made reaches `from`,
         // `count` pieces fall in every `every` drops. Nothing falls in below
-        // the first row; the last holds from 25 to the end of the run, 35
-        // and past it. (It used to step up once more at 30, to three every
-        // two drops — more than a merge a drop just to stand still — and no
-        // one reached 35; tools/sim.js measured it.)
+        // the first row; the last holds from 20 to the end of the run, however
+        // high it climbs. (Steps at 25 and 30 kept every run in the twenties;
+        // tools/sim.js measured it.)
         falls: [
             { from: 10, count: 1, every: 5 },
             { from: 15, count: 1, every: 3 },
-            { from: 20, count: 2, every: 5 },
-            { from: 25, count: 2, every: 3 }
+            { from: 20, count: 2, every: 5 }
         ],
 
         // a fall never takes more than this share of the free squares, and
@@ -72,10 +70,11 @@ Game.Config = {
         // merges that fill the bomb dial: each merge your own moves make
         // counts one, chains link by link; merges set off by pieces falling
         // in, or by a blast, do not count. The bomb is the one way to make
-        // room, so the dial fills in fifteen: tools/sim.js has 4% of the
-        // bot's runs reach 35 at that, against 7% with infinity in the game
-        // and the dial at twenty, and 1% without infinity at twenty.
-        bombPace: 15,
+        // room, and with no cap on the ladder it fills in eight: with the
+        // seam stopping at its 20 step, tools/sim.js (u-bomb8+seam20) has
+        // two runs in three pass 35, half reach the low 40s, and the best
+        // the high 80s.
+        bombPace: 8,
 
         // Infinity is out of the game. The piece and its sweep are still
         // here — set infinityFrom to a score and it falls in again with the
@@ -91,7 +90,7 @@ Game.Config = {
         // rest of the run. Both the same as below for now.
         late: {
             from: 25,
-            bombPace: 15,
+            bombPace: 8,
             infinityEvery: 80
         }
     }

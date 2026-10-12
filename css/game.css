@@ -92,6 +92,25 @@
     color: rgba(255, 255, 255, 0.72);
 }
 
+/* the highest number ever made, on its own small tile beside the best */
+.scoreboard__best {
+    align-items: center;
+    gap: 8px;
+}
+
+.scoreboard__top {
+    display: grid;
+    place-items: center;
+    width: 1.5em;
+    height: 1.5em;
+    background: var(--num);
+}
+
+.scoreboard__top svg.icon {
+    width: 100%;
+    height: 100%;
+}
+
 .scoreboard__best:empty {
     display: none;
 }

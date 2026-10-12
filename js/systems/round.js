@@ -13,6 +13,7 @@ window.Game = window.Game || {};
         var save = Game.Storage.read(settings().saveKey) || {};
         return {
             best: save.best || 0,
+            bestTop: save.bestTop || 0,
             found: Array.isArray(save.found) ? save.found : [],
             game: save.game || null
         };
@@ -21,6 +22,7 @@ window.Game = window.Game || {};
     function writeSave(game) {
         Game.Storage.write(settings().saveKey, {
             best: state.best,
+            bestTop: state.bestTop,
             found: state.found,
             game: typeof game === "undefined" ? held : game
         });
@@ -392,6 +394,7 @@ window.Game = window.Game || {};
 
         var record = state.score > state.best;
         if (record) state.best = state.score;
+        if (state.highest > (state.bestTop || 0)) state.bestTop = state.highest;
         drop();
 
         Game.Events.emit("game:over", {
@@ -442,6 +445,7 @@ window.Game = window.Game || {};
                 lastInfinity: null,
                 bomb: 0,
                 best: save.best,
+                bestTop: save.bestTop,
                 found: save.found
             };
             fillHand();
@@ -486,6 +490,7 @@ window.Game = window.Game || {};
                 lastInfinity: typeof game.lastInfinity === "number" ? game.lastInfinity : null,
                 bomb: game.bomb || 0,
                 best: save.best,
+                bestTop: save.bestTop,
                 found: save.found
             };
             fillHand();

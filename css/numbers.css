@@ -111,7 +111,8 @@
 /* where the colour is painted on the piece itself, the turn is too */
 .slot.num-35,
 .how__cell.num-35,
-.about__tile.num-35 {
+.about__tile.num-35,
+.scoreboard__top.num-35 {
     animation: wheel-turn 14s linear infinite;
 }
 

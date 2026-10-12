@@ -34,9 +34,13 @@ window.Game = window.Game || {};
     function paintBest() {
         var round = Game.Round.get();
         if (!bestEl || !round) return;
-        // no word for it: the small number in the corner is the one to beat
+        // no word for it: the small number under the score is the one to
+        // beat, and beside it the highest number ever made, on its own tile
+        var top = round.bestTop || 0;
         bestEl.innerHTML = round.best
-            ? Game.Icons.number(round.best, "Best " + round.best)
+            ? Game.Icons.number(round.best, "Best " + round.best) +
+              (top ? '<span class="scoreboard__top num num-' + Math.min(top, 35) + '" ' +
+                     'aria-label="Best number ' + top + '">' + Game.Icons.svg("n" + top) + "</span>" : "")
             : "";
     }
 

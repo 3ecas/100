@@ -42,6 +42,17 @@ window.Game = window.Game || {};
         { id: "n35", name: "Thirty-five", icon: "n35", tint: "num num-35", points: 132000 }
     ];
 
+    // No cap: past 35 the ladder goes on, every number wearing 35's turning
+    // rainbow and paying 1.4 times the one under it, as the top rungs always
+    // have. TOP is beyond anything a 6 x 6 board can hold.
+    var TOP = 200;
+    for (var n = 36; n <= TOP; n++) {
+        ladder.push({
+            id: "n" + n, name: String(n), icon: "n" + n, tint: "num num-35",
+            points: Math.round(ladder[ladder.length - 1].points * 1.4)
+        });
+    }
+
     ladder.forEach(function (piece, index) {
         var above = ladder[index + 1];
         piece.tier = index + 1;
@@ -90,11 +101,8 @@ window.Game = window.Game || {};
 
         // No floor of a full window: a run starts on 1 alone and every rung
         // it makes joins the deal, until there are three and the bottom one
-        // drops off — making a 4 is what takes the 1 out of the hand. The
-        // deal climbs as far as 34 and no further: 35 is only ever built,
-        // never dealt, or a run would have no end — three 35s cash in and
-        // leave, and with 35 in hand the board could never fill. From the
-        // first 34 the deal is 32, 33 and 34 for the rest of the run.
+        // drops off — making a 4 is what takes the 1 out of the hand. There
+        // is no cap: the deal follows the best number made all the way up.
         return Math.max(1, Math.min(made, peak - 1));
     }
 

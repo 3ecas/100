@@ -42,7 +42,8 @@ const CROWDED = 14;              // free squares at or under this: spend the bom
 /* ---- the settings to try ----------------------------------------------- */
 const SETTINGS = {
     base: {
-        note: "as the game is: no infinity, the dial at 15, the seam holding at 25, 34 dealt once made",
+        note: "as the game is: no cap, no infinity, the dial at 8, the seam stopping at 20",
+        uncap: true,
         apply: function () {}
     },
     withinf: {
@@ -356,6 +357,7 @@ function uncapped(src) {
         points = Math.round(points * 1.4);
         extra += ',\n        { id: "n' + n + '", name: "' + n + '", icon: "n35", tint: "num num-35", points: ' + points + ' }';
     }
+    if (/var TOP = \d+/.test(src)) return src;           // the game has no cap of its own now
     return src.replace(/(\{ id: "n35"[^}]*\})/, "$1" + extra);
 }
 

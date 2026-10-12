@@ -274,8 +274,14 @@ window.Game = window.Game || {};
             'stroke-width="' + LOOP_WIDTH + '"/>'
     };
 
-    // the numbers, 0 to 35: the plain 0 is the mark the bomb dial wears
+    // the numbers, 0 to 35 ready; any higher one is drawn the first time it
+    // is asked for. The plain 0 is the mark the bomb dial wears.
     for (var n = 0; n <= 35; n++) art["n" + n] = numeral(n);
+
+    function artFor(name) {
+        if (!art[name] && /^n\d+$/.test(name)) art[name] = numeral(+name.slice(1));
+        return art[name];
+    }
 
     function wrap(body, isArt) {
         return (
@@ -289,7 +295,7 @@ window.Game = window.Game || {};
 
     Game.Icons = {
         has: function (name) {
-            return !!(art[name] || line[name]);
+            return !!(artFor(name) || line[name]);
         },
 
         /* Any number in the same blocks — the score, the best, the points in
@@ -322,7 +328,7 @@ window.Game = window.Game || {};
         },
 
         svg: function (name) {
-            if (art[name]) return wrap(art[name], true);
+            if (artFor(name)) return wrap(art[name], true);
             if (line[name]) return wrap(line[name], false);
             return "";
         },

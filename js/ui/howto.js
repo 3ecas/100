@@ -150,8 +150,8 @@ window.Game = window.Game || {};
             ]
         },
         {
-            title: "Reach 35",
-            line: "Grid full, game over. Beat your best.",
+            title: "No top",
+            line: "Past 35 it goes on. Grid full, game over. Beat your best score and your best number.",
             cols: 7,
             rows: 5,
             hold: 70,
