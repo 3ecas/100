@@ -185,6 +185,76 @@ const SETTINGS = {
         uncap: true,
         apply: function (Game) { Game.Config.game.rows = 8; Game.Pieces.list.forEach(p => { p.points = p.tier; }); }
     },
+    "u-seam20": {
+        note: "no cap; the seam stops growing at 20 (2 every 5)",
+        uncap: true,
+        apply: function (Game) { Game.Config.game.falls.pop(); }
+    },
+    "u-seam15": {
+        note: "no cap; the seam stops growing at 15 (1 every 3)",
+        uncap: true,
+        apply: function (Game) { Game.Config.game.falls.splice(2); }
+    },
+    "u-seam10": {
+        note: "no cap; the seam never grows past 1 every 5",
+        uncap: true,
+        apply: function (Game) { Game.Config.game.falls.splice(1); }
+    },
+    "u-noseam": {
+        note: "no cap; nothing ever falls in",
+        uncap: true,
+        apply: function (Game) { Game.Config.game.falls = []; }
+    },
+    "u-hand2": {
+        note: "no cap; the hand deals only the top two numbers",
+        uncap: true,
+        apply: function (Game) { dealWidth(Game, 2); }
+    },
+    "u-bomb8": {
+        note: "no cap; the bomb dial fills in 8 merges",
+        uncap: true,
+        apply: function (Game) { Game.Config.game.bombPace = 8; Game.Config.game.late.bombPace = 8; }
+    },
+    "u-hand2+seam15": {
+        note: "no cap; the top two dealt, and the seam stopping at 1 every 3",
+        uncap: true,
+        apply: function (Game) { dealWidth(Game, 2); Game.Config.game.falls.splice(2); }
+    },
+    "u-bomb8+seam10": {
+        note: "no cap; the dial at 8, the seam never past 1 every 5",
+        uncap: true,
+        apply: function (Game) { SETTINGS["u-bomb8"].apply(Game); Game.Config.game.falls.splice(1); }
+    },
+    "u-bomb5+seam10": {
+        note: "no cap; the dial at 5, the seam never past 1 every 5",
+        uncap: true,
+        apply: function (Game) { Game.Config.game.bombPace = 5; Game.Config.game.late.bombPace = 5; Game.Config.game.falls.splice(1); }
+    },
+    "u-bomb5+seam20": {
+        note: "no cap; the dial at 5, the seam stopping at 2 every 5",
+        uncap: true,
+        apply: function (Game) { Game.Config.game.bombPace = 5; Game.Config.game.late.bombPace = 5; Game.Config.game.falls.pop(); }
+    },
+    "u-bomb8+noseam": {
+        note: "no cap; the dial at 8, nothing falls in",
+        uncap: true,
+        apply: function (Game) { SETTINGS["u-bomb8"].apply(Game); Game.Config.game.falls = []; }
+    },
+    "u-bomb8+seam20": {
+        note: "no cap; the dial at 8, the seam stopping at 2 every 5",
+        uncap: true,
+        apply: function (Game) { SETTINGS["u-bomb8"].apply(Game); Game.Config.game.falls.pop(); }
+    },
+    "u-bomb10+seam20": {
+        note: "no cap; the dial at 10, the seam stopping at 2 every 5",
+        uncap: true,
+        apply: function (Game) { Game.Config.game.bombPace = 10; Game.Config.game.late.bombPace = 10; Game.Config.game.falls.pop(); }
+    },
+    "u-bomb10": {
+        note: "no cap; the dial at 10, the seam as it is",
+        uncap: true,
+        apply: function (Game) { Game.Config.game.bombPace = 10; Game.Config.game.late.bombPace = 10; }
+    },
     "uncap+deal34": {
         note: "no cap, but the deal stops at 32-34: everything above is only built",
         uncap: true,
@@ -247,6 +317,15 @@ function dealWindow(Game, width, fromTier) {
 let after = 0;
 
 /* the deal's window reaches up to `upTo` until the peak is made */
+// the top `width` numbers made are dealt, with the bag's shares for them
+function dealWidth(Game, width) {
+    const ladder = Game.Pieces.list;
+    Game.Pieces.dealing = function (highestTier) {
+        const top = Math.max(1, Math.min(highestTier || 1, ladder.length - 1));
+        return ladder.slice(Math.max(0, top - width), top);
+    };
+}
+
 // the deal never climbs past `upTo`, whatever is made
 function dealCap(Game, upTo) {
     const ladder = Game.Pieces.list;
