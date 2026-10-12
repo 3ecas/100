@@ -70,6 +70,10 @@ const SETTINGS = {
             dealTo(Game, PEAK - 2);
         }
     },
+    "6x8": {
+        note: "as the game is, 35 capped, on a board 6 across and 8 high",
+        apply: function (Game) { Game.Config.game.rows = 8; }
+    },
     room16: {
         note: "a fall takes at most a sixth of the free squares, not a quarter",
         apply: function (Game) { Game.Config.game.fallRoom = 1 / 6; }
@@ -170,6 +174,16 @@ const SETTINGS = {
         note: "no cap, and every number pays its own value: 1 pays 1, 35 pays 35, 46 pays 46",
         uncap: true,
         apply: function (Game) { Game.Pieces.list.forEach(p => { p.points = p.tier; }); }
+    },
+    "uncap+6x8": {
+        note: "no cap, on a board 6 across and 8 high",
+        uncap: true,
+        apply: function (Game) { Game.Config.game.rows = 8; }
+    },
+    "uncap+6x8+linear": {
+        note: "no cap, 6 by 8, and every number paying its own value",
+        uncap: true,
+        apply: function (Game) { Game.Config.game.rows = 8; Game.Pieces.list.forEach(p => { p.points = p.tier; }); }
     },
     "uncap+deal34": {
         note: "no cap, but the deal stops at 32-34: everything above is only built",
