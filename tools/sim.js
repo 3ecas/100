@@ -161,6 +161,31 @@ const SETTINGS = {
         note: "after a 35 the dial never fills again",
         apply: function (Game) { Game.Config.game.bombPace = 1e9; Game.Config.game.late.bombPace = 1e9; }
     },
+    uncap: {
+        note: "no cap: 35 merges into 36 and on up; the deal follows the top as it does below 35",
+        uncap: true,
+        apply: function () {}
+    },
+    "uncap+deal34": {
+        note: "no cap, but the deal stops at 32-34: everything above is only built",
+        uncap: true,
+        apply: function (Game) { dealCap(Game, PEAK - 1); }
+    },
+    "uncap+seam30": {
+        note: "no cap, and the seam steps up to 2 every 2 from 30, 3 every 2 from 35",
+        uncap: true,
+        apply: function (Game) {
+            Game.Config.game.falls.push({ from: 30, count: 2, every: 2 }, { from: 35, count: 3, every: 2 });
+        }
+    },
+    "uncap+deal34+seam30": {
+        note: "no cap, the deal stopping at 34, and the seam stepping up from 30",
+        uncap: true,
+        apply: function (Game) {
+            dealCap(Game, PEAK - 1);
+            Game.Config.game.falls.push({ from: 30, count: 2, every: 2 }, { from: 35, count: 3, every: 2 });
+        }
+    },
     widen: {
         note: "once a 35 is made the deal widens downward, one more number every 60 drops: 32-34, then 31-34, 30-34...",
         apply: function (Game) { dealWindow(Game, () => 3 + Math.floor(after / 60), PEAK); },
@@ -203,6 +228,15 @@ function dealWindow(Game, width, fromTier) {
 let after = 0;
 
 /* the deal's window reaches up to `upTo` until the peak is made */
+// the deal never climbs past `upTo`, whatever is made
+function dealCap(Game, upTo) {
+    const ladder = Game.Pieces.list;
+    Game.Pieces.dealing = function (highestTier) {
+        const top = Math.max(1, Math.min(highestTier || 1, upTo));
+        return ladder.slice(Math.max(0, top - 3), top);
+    };
+}
+
 function dealTo(Game, upTo) {
     var ladder = Game.Pieces.list;
     var WINDOW = 3;
@@ -214,7 +248,20 @@ function dealTo(Game, upTo) {
 }
 
 /* ---- the game, with no screen ---------------------------------------------- */
-function boot(apply) {
+/* the ladder past 35, for the uncapped settings: 36 to TOP, each paying
+   1.4 times the one under it, as the top of the ladder already does */
+const TOP = 120;
+function uncapped(src) {
+    let extra = "";
+    let points = 132000;
+    for (let n = 36; n <= TOP; n++) {
+        points = Math.round(points * 1.4);
+        extra += ',\n        { id: "n' + n + '", name: "' + n + '", icon: "n35", tint: "num num-35", points: ' + points + ' }';
+    }
+    return src.replace(/(\{ id: "n35"[^}]*\})/, "$1" + extra);
+}
+
+function boot(apply, setting) {
     const store = {};
     const win = {
         localStorage: {
@@ -232,7 +279,9 @@ function boot(apply) {
     const ctx = vm.createContext(Object.assign(win, { document: { addEventListener: () => {} }, console }));
     ["core/config", "core/events", "core/storage", "data/pieces",
      "systems/board", "systems/round", "systems/charges"].forEach(f => {
-        vm.runInContext(fs.readFileSync(path.join(root, "js", f + ".js"), "utf8"), ctx, { filename: f });
+        let src = fs.readFileSync(path.join(root, "js", f + ".js"), "utf8");
+        if (f === "data/pieces" && setting && setting.uncap) src = uncapped(src);
+        vm.runInContext(src, ctx, { filename: f });
     });
     const Game = ctx.Game;
     Game.Charges.init();
@@ -360,7 +409,7 @@ function playRun(Game, setting) {
     while (!over && drops < most) {
         const state = Game.Round.get();
         if (!state || !state.running) break;
-        if (!AFTER && state.highest >= PEAK) break;
+        if (!AFTER && !setting.uncap && state.highest >= PEAK) break;
         if (setting.tick) setting.tick(Game, drops);
 
         if (Game.Board.owes() > 0) {
@@ -414,7 +463,7 @@ names.forEach(name => {
     const results = [];
     const t0 = Date.now();
     for (let i = 0; i < RUNS; i++) {
-        const Game = boot(setting.apply);
+        const Game = boot(setting.apply, setting);
         results.push(playRun(Game, setting));
     }
     const tops = results.map(r => r.highest).sort((a, b) => a - b);
@@ -431,6 +480,18 @@ names.forEach(name => {
     }
     const died = {};
     results.forEach(r => { if (!r.reached) died[r.highest] = (died[r.highest] || 0) + 1; });
+    if (setting.uncap) {
+        const scores = results.map(r => r.score).sort((a, b) => a - b);
+        const endless = results.filter(r => r.drops >= MOST_DROPS).length;
+        const big = v => v >= 1e9 ? (v / 1e9).toFixed(1) + "B" : v >= 1e6 ? (v / 1e6).toFixed(1) + "M" : v >= 1e3 ? (v / 1e3).toFixed(0) + "k" : String(v);
+        const past = results.filter(r => r.highest >= PEAK).length;
+        console.log(pad(name, 22) + "  reach 35 " + pad((100 * past / RUNS).toFixed(0) + "%", 4, true) +
+            " | top median " + quantile(tops, 0.5) + ", p90 " + quantile(tops, 0.9) + ", best " + tops[tops.length - 1] +
+            " | score median " + big(quantile(scores, 0.5)) + ", p90 " + big(quantile(scores, 0.9)) + ", best " + big(scores[scores.length - 1]) +
+            " | drops median " + quantile(drops, 0.5) + ", p90 " + quantile(drops, 0.9) + " | endless " + (100 * endless / RUNS).toFixed(0) + "%" +
+            "   (" + ((Date.now() - t0) / 1000).toFixed(0) + "s)");
+        return;
+    }
     const where = Object.keys(died).sort((a, b) => a - b).map(k => k + ":" + died[k]).join(" ");
     console.log(pad(name, 15) + pad((100 * reached / RUNS).toFixed(0) + "%", 10, true) + pad(quantile(tops, 0.5), 12, true) +
         pad(quantile(tops, 0.9), 9, true) + pad(tops[tops.length - 1], 6, true) + pad(quantile(drops, 0.5), 14, true) + "  " + where +
