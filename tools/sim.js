@@ -166,6 +166,11 @@ const SETTINGS = {
         uncap: true,
         apply: function () {}
     },
+    "uncap+linear": {
+        note: "no cap, and every number pays its own value: 1 pays 1, 35 pays 35, 46 pays 46",
+        uncap: true,
+        apply: function (Game) { Game.Pieces.list.forEach(p => { p.points = p.tier; }); }
+    },
     "uncap+deal34": {
         note: "no cap, but the deal stops at 32-34: everything above is only built",
         uncap: true,
