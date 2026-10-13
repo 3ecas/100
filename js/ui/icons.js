@@ -33,107 +33,30 @@ window.Game = window.Game || {};
 
     /* ---- the numbers ------------------------------------------------------
 
-       Pieces n1 to n35 up the ladder, and the 0 the bomb carries. Every digit
-       is built from straight bars in a 5 × 7 box, 1.5 thick, square at every
-       corner — no curve anywhere and no outline, just white on the tile's
-       colour. The colour is the tile's, not the art's: see css/numbers.css. */
-    var W = 5;
-    var H = 7;
-    var T = 1.5;
-    var MID = (H - T) / 2;
-    var REACH = (H + T) / 2;
-
-    var BARS = {
-        a: [0, 0, W, T],             // top
-        b: [W - T, 0, T, REACH],     // upper right
-        c: [W - T, MID, T, REACH],   // lower right
-        d: [0, H - T, W, T],         // bottom
-        e: [0, MID, T, REACH],       // lower left
-        f: [0, 0, T, REACH],         // upper left
-        g: [0, MID, W, T]            // middle
-    };
-
-    var DIGITS = {
-        0: "abcdef", 2: "abged", 3: "abgcd", 4: "fgbc", 5: "afgcd",
-        6: "afgecd", 7: "abc", 8: "abcdefg", 9: "abcdfg"
-    };
-
-    // a 1 is narrower: a stem, and a flag off the top of it
-    var ONE = { w: 4, bars: [[4 - T, 0, T, H], [4 - T - 1.3, 0, 1.3, T]] };
-
-    // and a plus, for the points a merge throws up to the score
-    var PLUS = { w: W, bars: [[0, MID, W, T], [(W - T) / 2, 1, T, H - 2]] };
-
-    // and a times, for the length of a chain: five squares set as an X
-    var TIMES = {
-        w: W,
-        bars: [[0.25, 1.25, T, T], [3.25, 1.25, T, T], [1.75, 2.75, T, T],
-               [0.25, 4.25, T, T], [3.25, 4.25, T, T]]
-    };
-
-    var TALL = 8.2;     // height of a number in the 24-unit tile
-    var GAP = 1;        // between two digits, in the digits' own units
-
+       Every number — on a piece, in the score, in the words — is set in the
+       one face (css/theme.css: --face). On a piece it is white text in the
+       24-unit box; the colour is the tile's, not the art's: see
+       css/numbers.css. */
     function round(v) {
         return Math.round(v * 1000) / 1000;
     }
 
-    function glyph(ch) {
-        if (ch === "1") return ONE;
-        if (ch === "+") return PLUS;
-        if (ch === "×") return TIMES;
-        return {
-            w: W,
-            bars: (DIGITS[ch] || "").split("").map(function (k) { return BARS[k]; })
-        };
+    // the face every number and word is set in (css/theme.css: --face), and
+    // how big a number is on a piece, in the 24-unit box, by how many digits
+    var FACE = 'ui-rounded, "SF Pro Rounded", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif';
+    var SIZES = { 1: 15, 2: 14, 3: 11 };
+
+    function sizeOf(digits) {
+        return SIZES[String(digits).length] || 9;
     }
 
-    /* a number's bars in the digits' own units — y down from 0 to H — and
-       the span they actually cover, left to right */
-    function layout(text) {
-        var placed = [];
-        var x = 0;
-
-        String(text).split("").forEach(function (ch, i) {
-            if (i) x += GAP;
-            var own = glyph(ch);
-            own.bars.forEach(function (r) {
-                placed.push([x + r[0], r[1], r[2], r[3]]);
-            });
-            x += own.w;
-        });
-
-        var left = Infinity;
-        var right = -Infinity;
-        placed.forEach(function (r) {
-            left = Math.min(left, r[0]);
-            right = Math.max(right, r[0] + r[2]);
-        });
-
-        return { bars: placed, left: left, right: right };
-    }
-
-    function outline(list) {
-        return list.map(function (r) {
-            return "M" + round(r[0]) + " " + round(r[1]) + "h" + round(r[2]) +
-                "v" + round(r[3]) + "h" + round(-r[2]) + "Z";
-        }).join("");
-    }
-
-    /* the bars of a number on a tile, as [x, y, w, h] in the 24-unit box,
-       centred on what is actually drawn rather than on the digits' boxes */
-    function bars(n) {
-        var set = layout(n);
-        var k = TALL / H;
-        var dx = 12 - (set.left + set.right) * k / 2;
-        var dy = 12 - TALL / 2;
-        return set.bars.map(function (r) {
-            return [dx + r[0] * k, dy + r[1] * k, r[2] * k, r[3] * k];
-        });
-    }
-
-    function numeral(n) {
-        return '<path fill="#fff" d="' + outline(bars(n)) + '"/>';
+    /* a number on a piece: text in the face, centred in the box; `mark` is
+       the class the bomb's 0 wears */
+    function numeral(n, mark) {
+        var digits = String(n);
+        return '<text class="digits' + (mark ? " mark" : "") + '" x="12" y="12.6" ' +
+            'text-anchor="middle" dominant-baseline="central" font-size="' + sizeOf(digits) + '">' +
+            digits + "</text>";
     }
 
     function escape(text) {
@@ -190,7 +113,7 @@ window.Game = window.Game || {};
     var art = {
         // the 0 alone: the tile is black (css/numbers.css), as a number's is
         // its colour, and the mark winks (the class)
-        bomb: '<path class="mark" fill="#fff" d="' + outline(bars(0)) + '"/>',
+        bomb: numeral(0, true),
 
         infinity:
             '<path d="' + DIAMOND + '" fill="' + INK + '"/>' +
@@ -267,9 +190,10 @@ window.Game = window.Game || {};
             if (digits === null) return;
 
             ctx.fillStyle = "#fff";
-            bars(digits).forEach(function (r) {
-                ctx.fillRect(r[0], r[1], r[2], r[3]);
-            });
+            ctx.font = "800 " + sizeOf(digits) + "px " + FACE;
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillText(digits, 12, 12.6);
         },
 
         /* the piece whose art is its own shape and ground — a number, and

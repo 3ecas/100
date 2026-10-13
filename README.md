@@ -73,10 +73,11 @@ first time it opens only from the ? button.
 
 ## The look
 
-Every piece is a flat square with its number in white, in block digits built
-from straight bars — no curves, no outline. The grid is white, and so are the
-buttons, drawn the same way; the score, the best and the few words the game
-says are set in a rounded face, so they read at a glance. Behind it all, the
+Every piece is a flat square with its number in white. Everything the game
+writes — the numbers on the pieces, the score, the best, the few words it
+says — is set in one rounded face, at weights that vary by role: heaviest on
+the pieces and the score, lighter for the lines of the tutorial. The grid and
+the buttons are white. Behind it all, the
 colours of the numbers on the board — in pastel, so the tiles stand out —
 blend into one another and wiggle slowly in place. The colours go up the ladder in
 sets of four — 1 to 4, 5 to 8, and so on — and each set wears one colour, the

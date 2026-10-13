@@ -6,6 +6,11 @@
    see has to subtract these. They resolve to 0px on any device without them,
    which is what makes one set of rules cover every screen. */
 :root {
+    /* the one face everything is set in — the numbers on the pieces, the
+       score, the words — at weights that vary by role */
+    --face: ui-rounded, "SF Pro Rounded", system-ui, -apple-system,
+        "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
     --safe-top: env(safe-area-inset-top, 0px);
     --safe-right: env(safe-area-inset-right, 0px);
     --safe-bottom: env(safe-area-inset-bottom, 0px);
@@ -89,6 +94,7 @@
 html,
 body {
     height: 100%;
+    font-family: var(--face);
 }
 
 html {
@@ -197,19 +203,27 @@ svg.icon--art {
     fill: none;
 }
 
+/* the number on a piece: white, in the face, at its heaviest */
+svg.icon text.digits {
+    font-family: var(--face);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    fill: #fff;
+}
+
 /* The game's text — the score, the best, the words it says — in a rounded
    face that reads at a glance (Game.Icons.number, Game.Icons.words); the
    numbers on the pieces keep their block digits. */
 .word,
 .num-text {
-    font-family: ui-rounded, "SF Pro Rounded", system-ui, -apple-system,
-        "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    font-weight: 800;
+    font-family: var(--face);
     line-height: 1.2;
 }
 
+/* words at a medium weight, numbers bold; each place sets its own (css/game.css) */
 .word {
     font-size: 1.15em;
+    font-weight: 500;
     letter-spacing: 0.01em;
     text-wrap: balance;
 }
@@ -218,6 +232,7 @@ svg.icon--art {
     display: block;
     flex: none;
     font-size: 1.1em;
+    font-weight: 700;
     font-variant-numeric: tabular-nums;
     letter-spacing: 0.02em;
 }

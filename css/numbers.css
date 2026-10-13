@@ -237,10 +237,10 @@
     height: 34px;
 }
 
-.dial--bomb .dial__mark path {
+.dial--bomb .dial__mark text.digits {
     fill: var(--ink);
 }
 
-.dial--bomb.is-ready .dial__mark path {
+.dial--bomb.is-ready .dial__mark text.digits {
     fill: #fff;
 }

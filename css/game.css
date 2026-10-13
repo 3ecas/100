@@ -1085,3 +1085,20 @@
     filter: grayscale(1);
     transform: scale(0.94);
 }
+
+
+/* ---- weights by role (the one face is set in css/theme.css) ------------- */
+.scoreboard__value .num-text { font-weight: 800; }
+.scoreboard__best .num-text { font-weight: 500; }
+.scoreboard__ask .word { font-weight: 600; }
+.tool__say .word { font-weight: 600; }
+.how__title .word { font-weight: 800; }
+.how__line .word { font-weight: 400; }
+.how__next .word,
+.how__skip .word { font-weight: 700; }
+.over__label .word { font-weight: 500; }
+.over__score .num-text { font-weight: 800; }
+.over__best .num-text { font-weight: 500; }
+.about__title .num-text { font-weight: 800; }
+.about__line .word { font-weight: 400; }
+.combo .num-text { font-weight: 800; }
