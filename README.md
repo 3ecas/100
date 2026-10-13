@@ -86,8 +86,9 @@ set starts a little darker than the one before, so the run walks the whole
 wheel — green, yellow, orange, red, pink, purple, violet, blue, and a deep teal
 for 33 to 36 — and the start of a run looks as easy as it plays while the top
 looks as hard as it is. The palette has 36 colours, so from 37 the numbers
-walk it round again. The 100 alone wears every colour, round the clock, and
-turns slowly through them. The shades are
+walk it round again. The 100 alone wears every colour, as rings round its
+centre that flow slowly outward — a circular gradient of the wheel, and the
+app icon is the same picture. The shades are
 made by `tools/palette.js`: the hues and the steps are set there, and
 `npm run palette` writes them into `css/numbers.css`. The bomb is the one
 piece that is not a number, and it does not look like one: black, with its 0
@@ -131,8 +132,8 @@ web/
 tools/
   palette.js       the colours of the numbers, written into css/numbers.css
   stamp.js         cache-busting for the app builds and the website
-  icon.swift       draws the iOS app icon and launch screen (needs a Mac)
-  icon-android.js  draws the Android launcher icons and the Play listing art
+  icon.js          draws the app icon for iOS, Android and the Play listing,
+                   and the launch screen (needs Playwright with Chromium)
   sim.js           a bot that plays the game by its own rules, to measure the climb
 store/
   play/            the Google Play listing icon and feature graphic
@@ -199,8 +200,9 @@ You need a Mac with **Xcode** (from the Mac App Store), **CocoaPods**
 (`brew install cocoapods`), Node, and a paid Apple Developer account.
 
 1. `npm install` — once.
-2. `npm run icons` — only if you change the icon; it redraws
-   `AppIcon-512@2x.png` (1024×1024, no alpha) and the launch images.
+2. `npm run icons` — only if you change the icon; it redraws every icon,
+   iOS and Android alike, and the launch images (`tools/icon.js`; it needs
+   `npm install -g playwright && npx playwright install chromium` once).
 3. `npm run ios` — builds `www/`, syncs it into the Xcode project and opens
    Xcode.
 4. In Xcode, under *Signing & Capabilities*, pick your team. Set the version
@@ -226,9 +228,9 @@ brings the Android SDK and a JDK), Node, and a Google Play developer account
 (a one-time fee).
 
 1. `npm install` — once.
-2. `npm run icons:android` — only if you change the icon; it redraws the
-   launcher icons under `android/app/src/main/res/mipmap-*` and the listing
-   art under `store/play/`. Plain Node, nothing to install.
+2. `npm run icons` — only if you change the icon; it redraws the launcher
+   icons under `android/app/src/main/res/mipmap-*` and the listing art under
+   `store/play/` along with the iOS ones.
 3. `npm run android` — builds `www/`, syncs it into the Android project and
    opens Android Studio. Let it finish its first Gradle sync (it downloads
    what it needs; a few minutes the first time).
@@ -256,10 +258,7 @@ brings the Android SDK and a JDK), Node, and a Google Play developer account
 
 Every upload needs a higher `versionCode` in `android/app/build.gradle`
 (1, 2, 3, …); `versionName` is what people see (1.0, 1.1, …). The project
-targets Android 15 (API 35), as Play requires, and runs on Android 6 and up.
-The launch is the page's own grey, as on iOS, and the launcher icon is the
-same 35 on the rainbow, drawn by `tools/icon-android.js` from the same
-digits and colours as everything else.
+targets Android 15 (API 35), as Play requires, and runs on Android 6 and up. The launch is the page's own grey, as on iOS, and the launcher icon is the same 100 on its rings, drawn by `tools/icon.js`.
 
 ## The stores' rules, and how the app meets them
 

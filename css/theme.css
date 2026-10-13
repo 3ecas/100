@@ -5,10 +5,19 @@
    so every measurement that should line up with what the player can actually
    see has to subtract these. They resolve to 0px on any device without them,
    which is what makes one set of rules cover every screen. */
+/* the one face everything is set in — the numbers on the pieces, the score,
+   the words — at weights that vary by role: Nunito, shipped with the game
+   (fonts/, under the SIL Open Font License), so it looks the same on every
+   phone and on the web */
+@font-face {
+    font-family: "Nunito";
+    src: url("../fonts/Nunito.ttf") format("truetype");
+    font-weight: 200 1000;
+    font-display: swap;
+}
+
 :root {
-    /* the one face everything is set in — the numbers on the pieces, the
-       score, the words — at weights that vary by role */
-    --face: ui-rounded, "SF Pro Rounded", system-ui, -apple-system,
+    --face: "Nunito", ui-rounded, "SF Pro Rounded", system-ui, -apple-system,
         "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 
     --safe-top: env(safe-area-inset-top, 0px);

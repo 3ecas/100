@@ -85,20 +85,21 @@
 .num-36 { --num: #003b3c; }
 /* palette:end */
 
-/* The 100 wears the wheel, and the wheel turns: --turn is where the gradient
-   starts from, taken slowly round wherever a 35 is painted. Registering it
-   is what lets the angle interpolate; a browser that does not know @property
-   shows the wheel standing still. The stops are kept apart in --wheel, which
-   js/ui/icons.js reads back off --num for everything else that is painted
-   in the rainbow. */
-@property --turn {
-    syntax: "<angle>";
+/* The 100 wears every colour as rings round its centre — a circular
+   gradient of the wheel, one wheel every 160% of the way to the corner — and
+   the rings flow slowly outward: --ring is how far the pattern has moved.
+   Registering it is what lets it interpolate; a browser that does not know
+   @property shows the rings standing still. The wheel's stops are kept apart
+   in --wheel, which js/ui/icons.js reads for everything else painted in the
+   rainbow, and tools/icon.js draws the same rings on the app icon. */
+@property --ring {
+    syntax: "<percentage>";
     inherits: false;
-    initial-value: 0deg;
+    initial-value: 0%;
 }
 
-@keyframes wheel-turn {
-    to { --turn: 360deg; }
+@keyframes ring-flow {
+    to { --ring: 160%; }
 }
 
 .num-100 {
@@ -107,15 +108,30 @@
         #5ba84a 120deg, #00ab86 150deg, #00a6ad 180deg, #00a0d3 210deg,
         #5991ed 240deg, #927fe7 270deg, #ba71cb 300deg, #d4679f 330deg,
         #df676b 360deg;
-    --num: conic-gradient(from var(--turn, 0deg), var(--wheel));
+    --num: repeating-radial-gradient(
+        circle at 50% 50%,
+        #df676b calc(var(--ring, 0%) - 160.000%),
+        #d97230 calc(var(--ring, 0%) - 146.667%),
+        #bd8700 calc(var(--ring, 0%) - 133.333%),
+        #989900 calc(var(--ring, 0%) - 120.000%),
+        #5ba84a calc(var(--ring, 0%) - 106.667%),
+        #00ab86 calc(var(--ring, 0%) - 93.333%),
+        #00a6ad calc(var(--ring, 0%) - 80.000%),
+        #00a0d3 calc(var(--ring, 0%) - 66.667%),
+        #5991ed calc(var(--ring, 0%) - 53.333%),
+        #927fe7 calc(var(--ring, 0%) - 40.000%),
+        #ba71cb calc(var(--ring, 0%) - 26.667%),
+        #d4679f calc(var(--ring, 0%) - 13.333%),
+        #df676b calc(var(--ring, 0%) + 0.000%)
+    );
 }
 
-/* where the colour is painted on the piece itself, the turn is too */
+/* where the colour is painted on the piece itself, the rings flow there */
 .slot.num-100,
 .how__cell.num-100,
 .about__tile.num-100,
 .scoreboard__top.num-100 {
-    animation: wheel-turn 14s linear infinite;
+    animation: ring-flow 14s linear infinite;
 }
 
 /* ---- on the board ---------------------------------------------------------
@@ -169,7 +185,7 @@
 }
 
 /* On the board the art arrives, falls and pops with animations of its own,
-   and the chip flies: there the turning wheel is painted on the sign inside
+   and the chip flies: there the rings are painted on the sign inside
    instead, which fills the art and has no animation to lose. */
 .tile.num-100 .tile__art {
     background: none;
@@ -177,8 +193,23 @@
 
 .tile.num-100 .tile__art svg.icon,
 .float.num-100 svg.icon {
-    background: conic-gradient(from var(--turn, 0deg), var(--wheel));
-    animation: wheel-turn 14s linear infinite;
+    background: repeating-radial-gradient(
+        circle at 50% 50%,
+        #df676b calc(var(--ring, 0%) - 160.000%),
+        #d97230 calc(var(--ring, 0%) - 146.667%),
+        #bd8700 calc(var(--ring, 0%) - 133.333%),
+        #989900 calc(var(--ring, 0%) - 120.000%),
+        #5ba84a calc(var(--ring, 0%) - 106.667%),
+        #00ab86 calc(var(--ring, 0%) - 93.333%),
+        #00a6ad calc(var(--ring, 0%) - 80.000%),
+        #00a0d3 calc(var(--ring, 0%) - 66.667%),
+        #5991ed calc(var(--ring, 0%) - 53.333%),
+        #927fe7 calc(var(--ring, 0%) - 40.000%),
+        #ba71cb calc(var(--ring, 0%) - 26.667%),
+        #d4679f calc(var(--ring, 0%) - 13.333%),
+        #df676b calc(var(--ring, 0%) + 0.000%)
+    );
+    animation: ring-flow 14s linear infinite;
 }
 
 /* ---- the bomb and infinity ------------------------------------------------

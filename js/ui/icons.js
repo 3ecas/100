@@ -100,7 +100,7 @@ window.Game = window.Game || {};
         probe.className = "num num-100";
         probe.hidden = true;
         document.body.appendChild(probe);
-        var found = getComputedStyle(probe).getPropertyValue("--num");
+        var found = getComputedStyle(probe).getPropertyValue("--wheel");
         document.body.removeChild(probe);
 
         var stops = [];
