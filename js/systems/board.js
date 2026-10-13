@@ -109,6 +109,17 @@ window.Game = window.Game || {};
        new number appears on the far one: the piece most steps away, the
        lowest and then leftmost of those if several are. A group with a newer
        piece in it goes first. `eat` comes back far end first. */
+    function oldMergeAt() {
+        return Game.Config.game.oldMergeAt || 0;
+    }
+
+    // the lowest rung the hand deals right now
+    function dealFloor() {
+        var round = Game.Round && Game.Round.get && Game.Round.get();
+        var deal = Game.Pieces.dealing(round ? round.highest : 1);
+        return deal.length ? deal[0].tier : 1;
+    }
+
     function nextGroup() {
         var need = Game.Config.game.mergeAt || 3;
         var best = null;
@@ -125,6 +136,8 @@ window.Game = window.Game || {};
                 // the top of the ladder has nothing to become: cashAt of it
                 // together cash in and leave (never, if that is Infinity)
                 var want = piece.next ? need : (Game.Config.game.cashAt || need);
+                // an old number, one the hand no longer deals, may need fewer
+                if (piece.next && oldMergeAt() && piece.tier < dealFloor()) want = oldMergeAt();
                 if (want === Infinity) continue;
 
                 var taking = reach(cell, want);

@@ -42,13 +42,15 @@ window.Game = window.Game || {};
         { id: "n35", name: "Thirty-five", icon: "n35", tint: "num num-35", points: 132000 }
     ];
 
-    // No cap: past 35 the ladder goes on, every number wearing 35's turning
-    // rainbow and paying 1.4 times the one under it, as the top rungs always
-    // have. TOP is beyond anything a 6 x 6 board can hold.
+    // No cap: past 35 the ladder goes on, paying 1.4 times the one under it,
+    // as the top rungs always have, and walking the palette round again —
+    // 36 to 39 in the greens of 1 to 4, and so on — with every 35th number,
+    // 70 and 105, in the turning rainbow. TOP is beyond anything a 6 x 6
+    // board can hold.
     var TOP = 200;
     for (var n = 36; n <= TOP; n++) {
         ladder.push({
-            id: "n" + n, name: String(n), icon: "n" + n, tint: "num num-35",
+            id: "n" + n, name: String(n), icon: "n" + n, tint: "num num-" + (n % 35 || 35),
             points: Math.round(ladder[ladder.length - 1].points * 1.4)
         });
     }

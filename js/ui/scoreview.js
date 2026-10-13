@@ -39,7 +39,7 @@ window.Game = window.Game || {};
         var top = round.bestTop || 0;
         bestEl.innerHTML = round.best
             ? Game.Icons.number(round.best, "Best " + round.best) +
-              (top ? '<span class="scoreboard__top num num-' + Math.min(top, 35) + '" ' +
+              (top ? '<span class="scoreboard__top ' + Game.Pieces.byId("n" + top).tint + '" ' +
                      'aria-label="Best number ' + top + '">' + Game.Icons.svg("n" + top) + "</span>" : "")
             : "";
     }

@@ -256,6 +256,41 @@ const SETTINGS = {
         uncap: true,
         apply: function (Game) { Game.Config.game.bombPace = 10; Game.Config.game.late.bombPace = 10; }
     },
+    "old2": {
+        note: "numbers below the deal merge in pairs instead of threes",
+        uncap: true,
+        apply: function (Game) { Game.Config.game.oldMergeAt = 2; }
+    },
+    "blast2": {
+        note: "the bomb takes the 5 x 5 around it instead of 3 x 3",
+        uncap: true,
+        apply: function (Game) { Game.Config.game.blastReach = 2; }
+    },
+    "old2+blast2": {
+        note: "both",
+        uncap: true,
+        apply: function (Game) { Game.Config.game.oldMergeAt = 2; Game.Config.game.blastReach = 2; }
+    },
+    "blast2+dial15": {
+        note: "blast2, with the dial at 15",
+        uncap: true,
+        apply: function (Game) { Game.Config.game.blastReach = 2; Game.Config.game.bombPace = 15; Game.Config.game.late.bombPace = 15; }
+    },
+    "blast2+dial20": {
+        note: "blast2, with the dial at 20",
+        uncap: true,
+        apply: function (Game) { Game.Config.game.blastReach = 2; Game.Config.game.bombPace = 20; Game.Config.game.late.bombPace = 20; }
+    },
+    "old2+dial15": {
+        note: "old2, with the dial at 15",
+        uncap: true,
+        apply: function (Game) { Game.Config.game.oldMergeAt = 2; Game.Config.game.bombPace = 15; Game.Config.game.late.bombPace = 15; }
+    },
+    "old2+dial20": {
+        note: "old2, with the dial at 20",
+        uncap: true,
+        apply: function (Game) { Game.Config.game.oldMergeAt = 2; Game.Config.game.bombPace = 20; Game.Config.game.late.bombPace = 20; }
+    },
     "uncap+deal34": {
         note: "no cap, but the deal stops at 32-34: everything above is only built",
         uncap: true,
@@ -588,6 +623,7 @@ names.forEach(name => {
         console.log(pad(name, 22) + "  reach 35 " + pad((100 * past / RUNS).toFixed(0) + "%", 4, true) +
             " | top median " + quantile(tops, 0.5) + ", p90 " + quantile(tops, 0.9) + ", best " + tops[tops.length - 1] +
             " | score median " + big(quantile(scores, 0.5)) + ", p90 " + big(quantile(scores, 0.9)) + ", best " + big(scores[scores.length - 1]) +
+            " | reach 58 " + (100 * results.filter(r => r.highest >= 58).length / RUNS).toFixed(0) + "%" +
             " | drops median " + quantile(drops, 0.5) + ", p90 " + quantile(drops, 0.9) + " | endless " + (100 * endless / RUNS).toFixed(0) + "%" +
             "   (" + ((Date.now() - t0) / 1000).toFixed(0) + "s)");
         return;
