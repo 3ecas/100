@@ -12,7 +12,7 @@ bottom. One rule:
 
 > **Three of the same number, touching, become the next one up.**
 
-Three 1s make a 2, three 2s make a 3, all the way to 35. A merge starts at
+Three 1s make a 2, three 2s make a 3, all the way up to 100. A merge starts at
 the piece that arrived last — the one you dropped, or the one the merge before
 made — and runs through the others to the far one, where the new number
 appears. Whatever was above a merge falls into the gap, which can set off the
@@ -21,30 +21,39 @@ make one: four or five of a kind still make one of the next number, six make
 two.
 
 The hand deals three numbers — the best you have made and the two under it —
-so the deal climbs with you, as far as 34: 35 itself is only ever built, never
-dealt, or a run would have no end. From the first 34 the deal is 32, 33 and 34
-for the rest of the run. The three come round in turn rather than by the roll of a
-die: they go into a bag — the lowest four times, the middle three, and the
-top once — and the hand is dealt from it until it is empty, so none of them
-stays away for long, and the same number never comes three times running. Once you make a 10 the seam starts to give way and pieces
+so the deal climbs with you all the way. The three come round in turn rather
+than by the roll of a die: they go into a bag — the lowest four times, the
+middle three, and the top once — and the hand is dealt from it until it is
+empty, so none of them stays away for long, and the same number never comes
+three times running. Once you make a 10 the seam starts to give way and pieces
 fall in on their own, into columns you did not pick — more of them, and more
-often, the higher you climb: one every five drops from 10, one every three from
-15, two every five from 20, two every three from 25 to the end. The run ends
-when the board is full.
+often, the higher you climb: one every five drops from 10, one every three
+from 15, two every five from 20 to the end. The run ends when the board is
+full.
 
-**The bomb — the black 0.** The dial beside the hand
-fills with the merges your moves make — fifteen fill it — and keeps its charge
-if you leave mid-run. When it is full, tap it and pick a column to drop a bomb.
-It joins nothing; a merge beside it, or its own five-turn fuse, sets it off,
-and the eight squares around it go with it.
+**Old numbers merge in pairs.** A number the hand no longer deals is old, and
+two old ones that touch make one of the next — so the numbers the climb left
+behind can be cleared instead of clogging the board for good.
 
-The bomb is the one way to make room. Infinity — a white diamond that fell
-in now and then and swept a whole number off the board when set off — is out
-of the game: with it, reaching 35 came too easily. Its piece and its sweep
-are still in the code, switched off in `js/core/config.js`.
+**The bomb — the black 0.** The dial beside the hand fills with the merges
+your moves make — twelve fill it — and keeps its charge if you leave mid-run.
+When it is full, tap it and pick a column to drop a bomb. It joins nothing; a
+merge beside it, or its own five-turn fuse, sets it off, and the eight squares
+around it go with it. Infinity — a white diamond that fell in now and then and
+swept a whole number off the board when set off — is out of the game; its
+piece and its sweep are still in the code, switched off in
+`js/core/config.js`.
 
-Three 35s have nowhere to go: they cash in for double and leave the board.
-Getting to 35 is hard; past it there is no ceiling on the score.
+**The 100 is the summit.** It wears the rainbow, and on the board the bomb
+dial's light pulses round it: the thing to blow up. A blast that takes the
+100 wins the run — the end card says so — and until then the run goes on,
+with the 100 standing. Two records are kept: the best score, and the best
+number ever made, on its own tile under the score.
+
+**The score.** A number is worth its face value, and a merge pays the value
+of one of the pieces merged, times the chain — three 1s pay 1, three 40s pay
+40. A blast pays what it destroys. A full climb runs to a few tens of
+thousands.
 
 There is no menu. The game opens on the board — the run left off last time,
 or a new one. How to play, sound and start over sit at the top left (start over
@@ -56,9 +65,9 @@ bomb sit side by side under it. When the board fills, the end card shows "game
 over", the run's score, and the best under it; a tap anywhere starts the next
 run.
 
-**How to play** is seven short pages, a line each, played out on a little grid
+**How to play** is six short pages, a line each, played out on a little grid
 of the game's own pieces — dropping, three making one, chains, numbers falling
-in, the bomb, and the climb to 35 — with the same shattering as the
+in, the bomb, and the climb to the 100 — with the same shattering as the
 game.
 It opens by itself the first time the game is played (remembered under
 `thirtyfive.tutorial` in `localStorage`), before anything drops: the run
@@ -79,8 +88,9 @@ lowest of the four in a light shade of it and the highest in a deep one. Every
 set starts a little darker than the one before, so the run walks the whole
 wheel — green, yellow, orange, red, pink, purple, violet, blue, and a deep teal
 for 33 and 34 — and the start of a run looks as easy as it plays while the top
-looks as hard as it is. 35 wears every colour, round the clock, and turns slowly through them. The
-shades are
+looks as hard as it is. 35 wears every colour, round the clock, and turns
+slowly through them; from 36 the numbers walk the palette round again, and
+the 100 wears the rainbow too. The shades are
 made by `tools/palette.js`: the hues and the steps are set there, and
 `npm run palette` writes them into `css/numbers.css`. The bomb is the one
 piece that is not a number, and it does not look like one: black, with its 0
@@ -113,7 +123,7 @@ css/
   numbers.css      the palette, the flat square pieces, the black bomb
 js/
   core/            config (every tunable number), events, storage
-  data/pieces.js   the ladder 1–35, the bomb (and infinity, switched off)
+  data/pieces.js   the ladder 1–100, the bomb (and infinity, switched off)
   systems/         state and rules — board, round, charges; never touch the DOM
   ui/              listen and draw — never edit state directly
   pages/game.js    boot
@@ -142,7 +152,7 @@ generated and not kept in git.
 All tuning lives in `js/core/config.js`. To see what a change does before
 making it, `npm run sim` plays the game a few hundred runs over with a
 steady, middling strategy, under the settings listed at the top of
-`tools/sim.js`, and reports how many runs reach 35 and where the rest die
+`tools/sim.js`, and reports how far runs climb, how many make the 100, and where the rest die
 (`npm run sim -- 500 base,withinf` for more runs of fewer settings).
 
 ## Run it in a browser
