@@ -9,10 +9,16 @@ window.Game = window.Game || {};
         return config || (config = Game.Config.game);
     }
 
+    // the scoring in force: a save from an older one keeps its best number
+    // and its run, but its scores belonged to another scale and are let go
+    var SCORING = 2;
+
     function readSave() {
         var save = Game.Storage.read(settings().saveKey) || {};
+        var same = save.scoring === SCORING;
+        if (!same && save.game) save.game.score = 0;
         return {
-            best: save.best || 0,
+            best: same ? save.best || 0 : 0,
             bestTop: save.bestTop || 0,
             found: Array.isArray(save.found) ? save.found : [],
             game: save.game || null
@@ -21,6 +27,7 @@ window.Game = window.Game || {};
 
     function writeSave(game) {
         Game.Storage.write(settings().saveKey, {
+            scoring: SCORING,
             best: state.best,
             bestTop: state.bestTop,
             found: state.found,

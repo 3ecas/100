@@ -351,9 +351,9 @@ window.Game = window.Game || {};
                     lit: lit,
                     chain: chain,
                     times: times,
-                    points: Math.round(
-                        (pair.piece.points || 0) * pair.eat.length * times
-                    ),
+                    // the value of a single one of the pieces merged, however
+                    // many joined, times the chain
+                    points: Math.round((pair.piece.points || 0) * times),
                     board: snapshot()
                 });
 
