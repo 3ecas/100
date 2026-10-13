@@ -358,6 +358,26 @@ const SETTINGS = {
         mult: { cycle: ["bomb", "x2", "bomb", "x3"], protect: false },
         apply: function (Game) { Game.Config.game.bombPace = 12; Game.Config.game.late.bombPace = 12; }
     },
+    "grid6x8": {
+        note: "the test build on a board 6 across and 8 high",
+        uncap: true,
+        apply: function (Game) { Game.Config.game.cols = 6; Game.Config.game.rows = 8; }
+    },
+    "grid7x7": {
+        note: "the test build on a board 7 across and 7 high",
+        uncap: true,
+        apply: function (Game) { Game.Config.game.cols = 7; Game.Config.game.rows = 7; }
+    },
+    "grid8x8": {
+        note: "the test build on a board 8 across and 8 high",
+        uncap: true,
+        apply: function (Game) { Game.Config.game.cols = 8; Game.Config.game.rows = 8; }
+    },
+    "grid9x9": {
+        note: "the test build on a board 9 across and 9 high",
+        uncap: true,
+        apply: function (Game) { Game.Config.game.cols = 9; Game.Config.game.rows = 9; }
+    },
     "uncap+deal34": {
         note: "no cap, but the deal stops at 32-34: everything above is only built",
         uncap: true,
