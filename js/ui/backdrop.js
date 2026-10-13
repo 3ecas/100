@@ -58,7 +58,7 @@ window.Game = window.Game || {};
     }
 
     /* a number's tile colour, read off the same class the tile wears; the
-       rainbow has no one colour, so 35 and the 100 lend none */
+       rainbow has no one colour, so the 100 lends none */
     function tone(piece) {
         probe.className = piece.tint;
         var found = getComputedStyle(probe).getPropertyValue("--num").trim();

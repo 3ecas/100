@@ -97,7 +97,7 @@ window.Game = window.Game || {};
 
     function readWheel() {
         var probe = document.createElement("span");
-        probe.className = "num num-35";
+        probe.className = "num num-100";
         probe.hidden = true;
         document.body.appendChild(probe);
         var found = getComputedStyle(probe).getPropertyValue("--num");

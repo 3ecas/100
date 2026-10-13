@@ -5,11 +5,11 @@
    highest in a deep one, the two between in the steps between. Every set
    starts a little darker than the one before, so the run walks the wheel
    from a fresh green through yellow, orange, red, pink, purple, violet and blue
-   to a deep teal, lightest at the bottom of the ladder and darkest at 33 and
-   34 — the two rungs left over, which take the middle of their ramp. 35
-   itself wears every colour round the clock (the conic gradient in the CSS;
-   the app icon in tools/icon.swift draws the same wheel) and is not made
-   here.
+   to a deep teal, lightest at the bottom of the ladder and darkest at 33 to
+   36. Past 36 the numbers walk the same 36 colours round again
+   (js/data/pieces.js). The 100 alone wears every colour round the clock (the
+   conic gradient in the CSS; the app icon draws the same wheel) and is not
+   made here.
 
    The shades are set in OKLCH — the lightness and chroma numbers below mean
    what they say to the eye — and turned into the hex the CSS carries, with
@@ -37,7 +37,7 @@ const SETS = [
     { name: "teal", hue: 196 }
 ];
 
-const TOP = 34;         // the last rung with a colour of its own
+const TOP = 36;         // the last rung with a colour of its own: nine sets of four
 const PER_SET = 4;
 const LIGHT = 0.77;     // lightness of the 1, the lightest tile on the board
 const STEP = 0.03;      // each rung in a set is this much darker than the last

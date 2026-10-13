@@ -84,10 +84,10 @@ sets of four — 1 to 4, 5 to 8, and so on — and each set wears one colour, th
 lowest of the four in a light shade of it and the highest in a deep one. Every
 set starts a little darker than the one before, so the run walks the whole
 wheel — green, yellow, orange, red, pink, purple, violet, blue, and a deep teal
-for 33 and 34 — and the start of a run looks as easy as it plays while the top
-looks as hard as it is. 35 wears every colour, round the clock, and turns
-slowly through them; from 36 the numbers walk the palette round again, and
-the 100 wears the rainbow too. The shades are
+for 33 to 36 — and the start of a run looks as easy as it plays while the top
+looks as hard as it is. The palette has 36 colours, so from 37 the numbers
+walk it round again. The 100 alone wears every colour, round the clock, and
+turns slowly through them. The shades are
 made by `tools/palette.js`: the hues and the steps are set there, and
 `npm run palette` writes them into `css/numbers.css`. The bomb is the one
 piece that is not a number, and it does not look like one: black, with its 0

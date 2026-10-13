@@ -8,7 +8,7 @@ window.Game = window.Game || {};
    would say, over the game dimmed. The apps do not show it: you are already
    there, and a store would rather not be shown the other one; their listings
    carry the privacy link. The words are the game's own square capitals, and
-   the 35 at the top is the top of the ladder, as on the icon.
+   the 100 at the top is the top of the ladder.
    ============================================================================= */
 
 (function () {

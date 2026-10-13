@@ -42,15 +42,16 @@ window.Game = window.Game || {};
         { id: "n35", name: "Thirty-five", icon: "n35", tint: "num num-35" }
     ];
 
-    // Past 35 the ladder goes on to 100, the summit. 36 to 99 walk the
-    // palette round again — 36 to 39 in the greens of 1 to 4, and so on —
-    // and the 100 wears the rainbow, as 35 does. Blowing the 100 up is how a
-    // run is won (js/systems/round.js).
+    // Past 35 the ladder goes on to 100, the summit. The palette has 36
+    // colours — nine sets of four — so from 37 the numbers walk it round
+    // again, 37 to 40 in the greens of 1 to 4 and so on, and the 100 alone
+    // wears the rainbow. Blowing the 100 up is how a run is won
+    // (js/systems/round.js).
     var TOP = 100;
     for (var n = 36; n <= TOP; n++) {
         ladder.push({
             id: "n" + n, name: String(n), icon: "n" + n,
-            tint: "num num-" + (n === TOP ? 35 : (n - 36) % 34 + 1)
+            tint: "num num-" + (n === TOP ? 100 : (n - 1) % 36 + 1)
         });
     }
 

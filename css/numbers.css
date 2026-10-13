@@ -79,11 +79,13 @@
 .num-32 { --num: #183c77; }
 
 /* teal */
-.num-33 { --num: #004d4e; }
-.num-34 { --num: #004445; }
+.num-33 { --num: #005657; }
+.num-34 { --num: #004d4e; }
+.num-35 { --num: #004445; }
+.num-36 { --num: #003b3c; }
 /* palette:end */
 
-/* 35 wears the wheel, and the wheel turns: --turn is where the gradient
+/* The 100 wears the wheel, and the wheel turns: --turn is where the gradient
    starts from, taken slowly round wherever a 35 is painted. Registering it
    is what lets the angle interpolate; a browser that does not know @property
    shows the wheel standing still. The stops are kept apart in --wheel, which
@@ -99,7 +101,7 @@
     to { --turn: 360deg; }
 }
 
-.num-35 {
+.num-100 {
     --wheel:
         #df676b 0deg, #d97230 30deg, #bd8700 60deg, #989900 90deg,
         #5ba84a 120deg, #00ab86 150deg, #00a6ad 180deg, #00a0d3 210deg,
@@ -109,10 +111,10 @@
 }
 
 /* where the colour is painted on the piece itself, the turn is too */
-.slot.num-35,
-.how__cell.num-35,
-.about__tile.num-35,
-.scoreboard__top.num-35 {
+.slot.num-100,
+.how__cell.num-100,
+.about__tile.num-100,
+.scoreboard__top.num-100 {
     animation: wheel-turn 14s linear infinite;
 }
 
@@ -169,12 +171,12 @@
 /* On the board the art arrives, falls and pops with animations of its own,
    and the chip flies: there the turning wheel is painted on the sign inside
    instead, which fills the art and has no animation to lose. */
-.tile.num-35 .tile__art {
+.tile.num-100 .tile__art {
     background: none;
 }
 
-.tile.num-35 .tile__art svg.icon,
-.float.num-35 svg.icon {
+.tile.num-100 .tile__art svg.icon,
+.float.num-100 svg.icon {
     background: conic-gradient(from var(--turn, 0deg), var(--wheel));
     animation: wheel-turn 14s linear infinite;
 }

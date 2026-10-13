@@ -38,9 +38,10 @@ window.Game = window.Game || {};
 
     /* A board is { index: pieceId }; anything absent is an empty square.
        `lit` rings pieces arriving or being tapped; `go` rings pieces about to
-       go — and whatever is ringed to go breaks apart as the next frame comes. */
-    function board(map, lit, go) {
-        return { map: map || {}, lit: lit || [], go: go || [] };
+       go — and whatever is ringed to go breaks apart as the next frame comes.
+       A frame holds for the page's `hold` unless it brings its own. */
+    function board(map, lit, go, hold) {
+        return { map: map || {}, lit: lit || [], go: go || [], hold: hold || 0 };
     }
 
     function plus(map, extra) {
@@ -50,16 +51,22 @@ window.Game = window.Game || {};
         return out;
     }
 
-    // the whole ladder, one number at a time
+    // the whole ladder, one number at a time, up to the 100 — then the 100
+    // alone, a bomb dropped beside it, and the blast that wins the run
     function ladder() {
         var frames = [board()];
         var map = {};
-        for (var n = 1; n <= 35; n++) {
+        for (var n = 1; n <= 100; n++) {
             map = plus(map, {});
             map[n - 1] = "n" + n;
             frames.push(board(map, [n - 1]));
         }
-        frames.push(board(map));
+        frames.push(board(map, [], [], 1100));
+        var top = { 44: "n100" };
+        frames.push(board(top, [44], [], 900));
+        frames.push(board(plus(top, { 45: "bomb" }), [45], [], 900));
+        frames.push(board(plus(top, { 45: "bomb" }), [], [44, 45], 700));
+        frames.push(board({}));
         return frames;
     }
 
@@ -151,10 +158,10 @@ window.Game = window.Game || {};
         },
         {
             title: "Blow up the 100",
-            line: "Past 35 it goes on to 100. Blow the 100 up with a bomb to win. Grid full, game over.",
-            cols: 7,
-            rows: 5,
-            hold: 70,
+            line: "The ladder goes to 100. Blow the 100 up with a bomb to win. Grid full, game over.",
+            cols: 10,
+            rows: 10,
+            hold: 60,
             last: 2600,
             frames: ladder()
         }
@@ -274,11 +281,12 @@ window.Game = window.Game || {};
         paint(page.frames[frame]);
 
         var last = frame === page.frames.length - 1;
+        var own = page.frames[frame].hold;
         timer = window.setTimeout(function () {
             frame = (frame + 1) % page.frames.length;
             if (frame === 0) shown = null;
             run();
-        }, last ? (page.last || page.hold * 3) : page.hold);
+        }, last ? (page.last || page.hold * 3) : (own || page.hold));
     }
 
     function show(index) {
