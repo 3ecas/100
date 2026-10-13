@@ -306,6 +306,58 @@ const SETTINGS = {
         uncap: true,
         apply: function (Game) { Game.Config.game.blastReach = 2; Game.Config.game.bombPace = 10; Game.Config.game.late.bombPace = 10; }
     },
+    "mult-alt20": {
+        note: "the dial at 20 gives bomb, x2, bomb, x3 in turn",
+        uncap: true,
+        mult: { cycle: ["bomb", "x2", "bomb", "x3"], protect: false },
+        apply: function (Game) { Game.Config.game.bombPace = 20; Game.Config.game.late.bombPace = 20; }
+    },
+    "mult-alt15": {
+        note: "the dial at 15 gives bomb, x2, bomb, x3 in turn",
+        uncap: true,
+        mult: { cycle: ["bomb", "x2", "bomb", "x3"], protect: false },
+        apply: function (Game) { Game.Config.game.bombPace = 15; Game.Config.game.late.bombPace = 15; }
+    },
+    "mult-only20": {
+        note: "the dial at 20 gives x2 and x3 in turn, no bomb",
+        uncap: true,
+        mult: { cycle: ["x2", "x3"], protect: false },
+        apply: function (Game) { Game.Config.game.bombPace = 20; Game.Config.game.late.bombPace = 20; }
+    },
+    "mult-old20": {
+        note: "as mult-alt20, but x2 and x3 spare the numbers the hand still deals",
+        uncap: true,
+        mult: { cycle: ["bomb", "x2", "bomb", "x3"], protect: true },
+        apply: function (Game) { Game.Config.game.bombPace = 20; Game.Config.game.late.bombPace = 20; }
+    },
+    "mult-old15": {
+        note: "as mult-alt15, but x2 and x3 spare the numbers the hand still deals",
+        uncap: true,
+        mult: { cycle: ["bomb", "x2", "bomb", "x3"], protect: true },
+        apply: function (Game) { Game.Config.game.bombPace = 15; Game.Config.game.late.bombPace = 15; }
+    },
+    "dial15": {
+        note: "the test build with the dial at 15, the plain bomb only",
+        uncap: true,
+        apply: function (Game) { Game.Config.game.bombPace = 15; Game.Config.game.late.bombPace = 15; }
+    },
+    "dial20": {
+        note: "the test build with the dial at 20, the plain bomb only",
+        uncap: true,
+        apply: function (Game) { Game.Config.game.bombPace = 20; Game.Config.game.late.bombPace = 20; }
+    },
+    "mult-alt10": {
+        note: "the dial at 10 gives bomb, x2, bomb, x3 in turn",
+        uncap: true,
+        mult: { cycle: ["bomb", "x2", "bomb", "x3"], protect: false },
+        apply: function (Game) { Game.Config.game.bombPace = 10; Game.Config.game.late.bombPace = 10; }
+    },
+    "mult-alt12": {
+        note: "the dial at 12 gives bomb, x2, bomb, x3 in turn",
+        uncap: true,
+        mult: { cycle: ["bomb", "x2", "bomb", "x3"], protect: false },
+        apply: function (Game) { Game.Config.game.bombPace = 12; Game.Config.game.late.bombPace = 12; }
+    },
     "uncap+deal34": {
         note: "no cap, but the deal stops at 32-34: everything above is only built",
         uncap: true,
@@ -439,6 +491,27 @@ function boot(apply, setting) {
     return Game;
 }
 
+/* x2 or x3 going off: every number that is a multiple of `k` leaves the
+   board (sparing the hand's numbers if `protect`), and the columns settle */
+function multiples(Game, k, protect) {
+    const s = Game.Config.game;
+    const floor = Game.Pieces.dealing(Game.Round.get().highest)[0].tier;
+    const board = Game.Board.snapshot().map(id => {
+        const p = id && Game.Pieces.byId(id);
+        if (!p || !p.tier || p.tier % k) return id;
+        if (protect && p.tier >= floor) return id;
+        return null;
+    });
+    const out = board.slice();
+    for (let x = 0; x < s.cols; x++) {
+        const kept = [];
+        for (let y = 0; y < s.rows; y++) if (board[y * s.cols + x]) kept.push(board[y * s.cols + x]);
+        const shift = s.rows - kept.length;
+        for (let y = 0; y < s.rows; y++) out[y * s.cols + x] = y >= shift ? kept[y - shift] : null;
+    }
+    Game.Board.load(out);
+}
+
 /* ---- the bot ---------------------------------------------------------------- */
 function around(Game, cell, far) {
     const near = [];
@@ -545,6 +618,7 @@ function playRun(Game, setting) {
     let drops = 0;
     let stuck = 0;
     let made35 = 0;
+    let uses = 0;
     let third35 = null;
     after = 0;
     const count = e => e.steps.forEach(st => {
@@ -568,7 +642,17 @@ function playRun(Game, setting) {
             continue;
         }
 
+        if (setting.mult && Game.Charges.bomb.ready() && Game.Board.empties().length <= CROWDED) {
+            const kind = setting.mult.cycle[uses % setting.mult.cycle.length];
+            if (kind !== "bomb") {
+                uses++;
+                multiples(Game, kind === "x2" ? 2 : 3, setting.mult.protect);
+                Game.Charges.bomb.reset(0);
+                continue;
+            }
+        }
         if (Game.Charges.bomb.ready() && Game.Board.empties().length <= CROWDED) {
+            if (setting.mult) uses++;
             const spot = bombSpot(Game);
             if (spot && Game.Charges.toggle("bomb")) {
                 if (!Game.Charges.aim(spot)) Game.Charges.disarm();
