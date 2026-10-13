@@ -1,4 +1,4 @@
-/* A soft rainbow turning behind everything. See js/ui/backdrop.js. */
+/* The board's colours, in pastel, wiggling behind everything. See js/ui/backdrop.js. */
 
 /* Behind the page rather than in front of the background: giving the table a
    stacking context instead put it over the fixed buttons, and they stopped
@@ -11,7 +11,7 @@
     pointer-events: none;
 }
 
-/* the wheel's hues, blended and turning (js/ui/backdrop.js): a canvas a
+/* the board's colours, blended and wiggling (js/ui/backdrop.js): a canvas a
    few dozen pixels across, stretched over the screen so the blend is soft */
 .fusion {
     position: absolute;

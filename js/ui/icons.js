@@ -136,81 +136,6 @@ window.Game = window.Game || {};
         return '<path fill="#fff" d="' + outline(bars(n)) + '"/>';
     }
 
-    /* ---- words ------------------------------------------------------------
-
-       The few words the game says, squared off like the numbers: capitals on
-       a 5 × 7 grid of squares, no curve anywhere. Each letter is its seven
-       rows, top to bottom; # is a filled square. */
-    var LETTERS = {
-        A: "#####|#...#|#...#|#####|#...#|#...#|#...#",
-        B: "####.|#...#|#...#|####.|#...#|#...#|####.",
-        C: "#####|#....|#....|#....|#....|#....|#####",
-        D: "####.|#...#|#...#|#...#|#...#|#...#|####.",
-        E: "#####|#....|#....|####.|#....|#....|#####",
-        F: "#####|#....|#....|####.|#....|#....|#....",
-        G: "#####|#....|#....|#.###|#...#|#...#|#####",
-        H: "#...#|#...#|#...#|#####|#...#|#...#|#...#",
-        I: "###|.#.|.#.|.#.|.#.|.#.|###",
-        J: "....#|....#|....#|....#|....#|#...#|#####",
-        K: "#...#|#..#.|#.#..|##...|#.#..|#..#.|#...#",
-        L: "#....|#....|#....|#....|#....|#....|#####",
-        M: "#...#|##.##|#.#.#|#.#.#|#...#|#...#|#...#",
-        N: "#...#|##..#|#.#.#|#..##|#...#|#...#|#...#",
-        O: "#####|#...#|#...#|#...#|#...#|#...#|#####",
-        P: "#####|#...#|#...#|#####|#....|#....|#....",
-        Q: "#####|#...#|#...#|#...#|#.#.#|#..##|#####",
-        R: "#####|#...#|#...#|#####|#..#.|#...#|#...#",
-        S: ".####|#....|#....|.###.|....#|....#|####.",
-        T: "#####|..#..|..#..|..#..|..#..|..#..|..#..",
-        U: "#...#|#...#|#...#|#...#|#...#|#...#|#####",
-        V: "#...#|#...#|#...#|#...#|#...#|.#.#.|..#..",
-        W: "#...#|#...#|#...#|#.#.#|#.#.#|##.##|#...#",
-        X: "#...#|#...#|.#.#.|..#..|.#.#.|#...#|#...#",
-        Y: "#...#|#...#|#...#|.###.|..#..|..#..|..#..",
-        Z: "#####|....#|...#.|..#..|.#...|#....|#####",
-        0: "#####|#...#|#..##|#.#.#|##..#|#...#|#####",
-        1: ".#.|##.|.#.|.#.|.#.|.#.|###",
-        2: "#####|....#|....#|#####|#....|#....|#####",
-        3: "#####|....#|....#|.####|....#|....#|#####",
-        4: "#...#|#...#|#...#|#####|....#|....#|....#",
-        5: "#####|#....|#....|####.|....#|....#|####.",
-        6: "#####|#....|#....|#####|#...#|#...#|#####",
-        7: "#####|....#|....#|...#.|..#..|..#..|..#..",
-        8: "#####|#...#|#...#|#####|#...#|#...#|#####",
-        9: "#####|#...#|#...#|#####|....#|....#|#####",
-        ".": ".|.|.|.|.|.|#",
-        ",": ".|.|.|.|.|#|#",
-        "-": "...|...|...|###|...|...|...",
-        "!": "#|#|#|#|#|.|#",
-        "?": "#####|....#|....#|..###|..#..|.....|..#.."
-    };
-
-    // one word as bars, a square apart letter to letter, each unbroken run
-    // of squares in a row joined into one bar
-    function word(text) {
-        var runs = [];
-        var x = 0;
-
-        text.split("").forEach(function (ch, i) {
-            var rows = (LETTERS[ch] || "...").split("|");
-            if (i) x += 1;
-            rows.forEach(function (row, y) {
-                var from = -1;
-                for (var c = 0; c <= row.length; c++) {
-                    if (row.charAt(c) === "#") {
-                        if (from < 0) from = c;
-                    } else if (from >= 0) {
-                        runs.push([x + from, y, c - from, 1]);
-                        from = -1;
-                    }
-                }
-            });
-            x += rows[0].length;
-        });
-
-        return { bars: runs, width: x };
-    }
-
     function escape(text) {
         return String(text).replace(/&/g, "&amp;").replace(/</g, "&lt;");
     }
@@ -302,12 +227,8 @@ window.Game = window.Game || {};
            flight. One em tall and as wide as it runs, in the colour of the
            text around it, and read out as the number it is, or as `label`. */
         number: function (text, label) {
-            var set = layout(text);
-            var wide = set.right - set.left;
-            return '<svg class="blocks" viewBox="' + round(set.left) + " 0 " +
-                round(wide) + " " + H + '" style="width:' + round(wide / H) +
-                'em;height:1em" role="img" aria-label="' + (label || text) + '">' +
-                '<path fill="currentColor" d="' + outline(set.bars) + '"/></svg>';
+            return '<span class="num-text" role="img" aria-label="' + escape(label || text) + '">' +
+                escape(String(text)) + "</span>";
         },
 
         /* Words in the square letters: one em tall, in the colour of the text
@@ -316,15 +237,7 @@ window.Game = window.Game || {};
            .words in css/theme.css); the words themselves are there too,
            unseen, for anyone listening rather than looking. */
         words: function (text) {
-            var pictures = String(text).toUpperCase().split(/\s+/).filter(Boolean)
-                .map(function (w) {
-                    var set = word(w);
-                    return '<svg class="glyphs" viewBox="0 0 ' + set.width + " " + H + '" ' +
-                        'style="width:' + round(set.width / H) + 'em;height:1em" ' +
-                        'aria-hidden="true" focusable="false"><path fill="currentColor" d="' +
-                        outline(set.bars) + '"/></svg>';
-                });
-            return '<span class="unseen">' + escape(text) + "</span>" + pictures.join("");
+            return '<span class="word">' + escape(String(text)) + "</span>";
         },
 
         svg: function (name) {

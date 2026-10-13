@@ -31,10 +31,6 @@ often, the higher you climb: one every five drops from 10, one every three
 from 15, two every five from 20 to the end. The run ends when the board is
 full.
 
-**Old numbers merge in pairs.** A number the hand no longer deals is old, and
-two old ones that touch make one of the next — so the numbers the climb left
-behind can be cleared instead of clogging the board for good.
-
 **The bomb — the black 0.** The dial beside the hand fills with the merges
 your moves make — twelve fill it — and keeps its charge if you leave mid-run.
 When it is full, tap it and pick a column to drop a bomb. It joins nothing; a
@@ -78,11 +74,11 @@ first time it opens only from the ? button.
 ## The look
 
 Every piece is a flat square with its number in white, in block digits built
-from straight bars — no curves, no outline. The grid is white; the score, the
-best and the buttons are white and drawn the same way, and the few words
-the game says are square capitals on a 5 × 7 grid. Behind it all, every
-hue of the wheel — muted, so the tiles stand out — blends into a soft rainbow
-that turns slowly round the screen. The colours go up the ladder in
+from straight bars — no curves, no outline. The grid is white, and so are the
+buttons, drawn the same way; the score, the best and the few words the game
+says are set in a rounded face, so they read at a glance. Behind it all, the
+colours of the numbers on the board — in pastel, so the tiles stand out —
+blend into one another and wiggle slowly in place. The colours go up the ladder in
 sets of four — 1 to 4, 5 to 8, and so on — and each set wears one colour, the
 lowest of the four in a light shade of it and the highest in a deep one. Every
 set starts a little darker than the one before, so the run walks the whole

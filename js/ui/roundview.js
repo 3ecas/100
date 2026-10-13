@@ -68,10 +68,8 @@ window.Game = window.Game || {};
             "</div>";
         // how many ems wide the score runs, so it can shrink to fit a narrow
         // screen: a run deep past 35 scores in the billions
-        var digits = overHost.querySelector(".over__score svg");
-        if (digits) {
-            digits.parentNode.style.setProperty("--wide", parseFloat(digits.style.width));
-        }
+        var digits = overHost.querySelector(".over__score");
+        if (digits) digits.style.setProperty("--wide", String(detail.score).length * 0.7);
 
         overHost.classList.add("is-open");
         overAt = Date.now();

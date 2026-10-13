@@ -27,8 +27,8 @@ window.Game = window.Game || {};
         if (!valueEl || value === drawn) return;
         drawn = value;
         valueEl.innerHTML = Game.Icons.number(value);
-        var digits = valueEl.firstChild;
-        if (digits) valueEl.style.setProperty("--wide", parseFloat(digits.style.width));
+        // about how many ems the digits run, so a long score can shrink to fit
+        valueEl.style.setProperty("--wide", String(value).length * 0.7);
     }
 
     function paintBest() {

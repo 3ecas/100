@@ -70,16 +70,8 @@ Game.Config = {
 
         // merges that fill the bomb dial: each merge your own moves make
         // counts one, chains link by link; merges set off by pieces falling
-        // in, or by a blast, do not count. The dial fills in twelve: with
-        // old numbers merging in pairs (oldMergeAt) and the seam stopping at
-        // its 20 step, tools/sim.js has the bot's typical run reach the 80s
-        // and one run in ten make the 100.
+        // in, or by a blast, do not count. The dial fills in twelve.
         bombPace: 12,
-
-        // A number the hand no longer deals is old, and merges in this many
-        // instead of mergeAt — two old ones that touch become one of the
-        // next — so the numbers left behind by the climb can be cleared.
-        oldMergeAt: 2,
 
         // Infinity is out of the game. The piece and its sweep are still
         // here — set infinityFrom to a score and it falls in again with the

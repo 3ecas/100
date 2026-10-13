@@ -42,7 +42,7 @@ const CROWDED = 14;              // free squares at or under this: spend the bom
 /* ---- the settings to try ----------------------------------------------- */
 const SETTINGS = {
     base: {
-        note: "as the game is: the ladder to 100, old numbers merging in pairs, the dial at 12, the seam stopping at 20",
+        note: "as the game is: the ladder to 100, the dial at 12, the seam stopping at 20",
         uncap: true,
         apply: function () {}
     },
@@ -256,20 +256,10 @@ const SETTINGS = {
         uncap: true,
         apply: function (Game) { Game.Config.game.bombPace = 10; Game.Config.game.late.bombPace = 10; }
     },
-    "old2": {
-        note: "numbers below the deal merge in pairs instead of threes",
-        uncap: true,
-        apply: function (Game) { Game.Config.game.oldMergeAt = 2; }
-    },
     "blast2": {
         note: "the bomb takes the 5 x 5 around it instead of 3 x 3",
         uncap: true,
         apply: function (Game) { Game.Config.game.blastReach = 2; }
-    },
-    "old2+blast2": {
-        note: "both",
-        uncap: true,
-        apply: function (Game) { Game.Config.game.oldMergeAt = 2; Game.Config.game.blastReach = 2; }
     },
     "blast2+dial15": {
         note: "blast2, with the dial at 15",
@@ -281,25 +271,10 @@ const SETTINGS = {
         uncap: true,
         apply: function (Game) { Game.Config.game.blastReach = 2; Game.Config.game.bombPace = 20; Game.Config.game.late.bombPace = 20; }
     },
-    "old2+dial15": {
-        note: "old2, with the dial at 15",
-        uncap: true,
-        apply: function (Game) { Game.Config.game.oldMergeAt = 2; Game.Config.game.bombPace = 15; Game.Config.game.late.bombPace = 15; }
-    },
-    "old2+dial20": {
-        note: "old2, with the dial at 20",
-        uncap: true,
-        apply: function (Game) { Game.Config.game.oldMergeAt = 2; Game.Config.game.bombPace = 20; Game.Config.game.late.bombPace = 20; }
-    },
     "dial10": {
         note: "the test build with the dial at 10",
         uncap: true,
         apply: function (Game) { Game.Config.game.bombPace = 10; Game.Config.game.late.bombPace = 10; }
-    },
-    "old2+dial10": {
-        note: "old numbers merge in pairs, the dial at 10",
-        uncap: true,
-        apply: function (Game) { Game.Config.game.oldMergeAt = 2; Game.Config.game.bombPace = 10; Game.Config.game.late.bombPace = 10; }
     },
     "blast2+dial10": {
         note: "the bomb takes 5 x 5, the dial at 10",
@@ -383,29 +358,6 @@ const SETTINGS = {
         uncap: true,
         mult: { cycle: ["bomb", "x2", "bomb", "x3"], protect: false },
         apply: function (Game) { Game.Config.game.bombPace = 8; Game.Config.game.late.bombPace = 8; }
-    },
-    "mult-alt10+old2": {
-        note: "bomb, x2, bomb, x3 from the dial at 10, old numbers merging in pairs",
-        uncap: true,
-        mult: { cycle: ["bomb", "x2", "bomb", "x3"], protect: false },
-        apply: function (Game) { Game.Config.game.bombPace = 10; Game.Config.game.late.bombPace = 10; Game.Config.game.oldMergeAt = 2; }
-    },
-    "mult-alt12+old2": {
-        note: "bomb, x2, bomb, x3 from the dial at 12, old numbers merging in pairs",
-        uncap: true,
-        mult: { cycle: ["bomb", "x2", "bomb", "x3"], protect: false },
-        apply: function (Game) { Game.Config.game.bombPace = 12; Game.Config.game.late.bombPace = 12; Game.Config.game.oldMergeAt = 2; }
-    },
-    "mult-alt15+old2": {
-        note: "bomb, x2, bomb, x3 from the dial at 15, old numbers merging in pairs",
-        uncap: true,
-        mult: { cycle: ["bomb", "x2", "bomb", "x3"], protect: false },
-        apply: function (Game) { Game.Config.game.bombPace = 15; Game.Config.game.late.bombPace = 15; Game.Config.game.oldMergeAt = 2; }
-    },
-    "old2+dial12": {
-        note: "old numbers merge in pairs, the dial at 12",
-        uncap: true,
-        apply: function (Game) { Game.Config.game.bombPace = 12; Game.Config.game.late.bombPace = 12; Game.Config.game.oldMergeAt = 2; }
     },
     "blast2+dial18": {
         note: "the bomb takes 5 x 5, the dial at 18",

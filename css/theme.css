@@ -197,27 +197,39 @@ svg.icon--art {
     fill: none;
 }
 
-/* numbers in the tiles' block digits (Game.Icons.number): one em tall, so
-   font-size sets how big they are */
-svg.blocks {
-    display: block;
-    flex: none;
+/* The game's text — the score, the best, the words it says — in a rounded
+   face that reads at a glance (Game.Icons.number, Game.Icons.words); the
+   numbers on the pieces keep their block digits. */
+.word,
+.num-text {
+    font-family: ui-rounded, "SF Pro Rounded", system-ui, -apple-system,
+        "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-weight: 800;
+    line-height: 1.2;
 }
 
-/* Words in the square letters (Game.Icons.words): a picture a word, one em
-   tall, laid out like a line of text — centred, and breaking between words
-   when it runs out of room. The row gap is the line spacing. */
+.word {
+    font-size: 1.15em;
+    letter-spacing: 0.01em;
+    text-wrap: balance;
+}
+
+.num-text {
+    display: block;
+    flex: none;
+    font-size: 1.1em;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.02em;
+}
+
+/* a line of words: centred, breaking when it runs out of room */
 .words {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
+    text-align: center;
     gap: 0.6em 0.45em;
-}
-
-svg.glyphs {
-    display: block;
-    flex: none;
 }
 
 /* there for screen readers, never seen */
