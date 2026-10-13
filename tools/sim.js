@@ -291,6 +291,21 @@ const SETTINGS = {
         uncap: true,
         apply: function (Game) { Game.Config.game.oldMergeAt = 2; Game.Config.game.bombPace = 20; Game.Config.game.late.bombPace = 20; }
     },
+    "dial10": {
+        note: "the test build with the dial at 10",
+        uncap: true,
+        apply: function (Game) { Game.Config.game.bombPace = 10; Game.Config.game.late.bombPace = 10; }
+    },
+    "old2+dial10": {
+        note: "old numbers merge in pairs, the dial at 10",
+        uncap: true,
+        apply: function (Game) { Game.Config.game.oldMergeAt = 2; Game.Config.game.bombPace = 10; Game.Config.game.late.bombPace = 10; }
+    },
+    "blast2+dial10": {
+        note: "the bomb takes 5 x 5, the dial at 10",
+        uncap: true,
+        apply: function (Game) { Game.Config.game.blastReach = 2; Game.Config.game.bombPace = 10; Game.Config.game.late.bombPace = 10; }
+    },
     "uncap+deal34": {
         note: "no cap, but the deal stops at 32-34: everything above is only built",
         uncap: true,
