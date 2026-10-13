@@ -130,6 +130,30 @@ window.Game = window.Game || {};
         tile.setAttribute("aria-label", art.name);
 
         if (piece === Game.Pieces.bomb.id) glow(tile);
+        if (piece === Game.Pieces.top().id) crown(tile);
+    }
+
+    /* The 100 on the board wears the ready dial's light round its edge — the
+       rainbow going round and strokes going out past it (js/ui/pulse.js) —
+       as the thing to blow up. The canvas reaches past the tile for them. */
+    var CROWN = 10;
+
+    function crown(tile) {
+        var canvas = document.createElement("canvas");
+        canvas.className = "tile__crown";
+        canvas.setAttribute("aria-hidden", "true");
+        tile.style.setProperty("--crown-room", CROWN + "px");
+        tile.appendChild(canvas);
+        if (!canvas.getContext) return;
+
+        tile.glow = Game.Pulse.make(canvas, false, function (one, gap) {
+            one.ctx.clearRect(0, 0, one.wide, one.tall);
+            var cx = one.wide / 2;
+            var cy = one.tall / 2;
+            var half = Math.min(one.wide, one.tall) / 2 - CROWN;
+            var paint = Game.Pulse.edge(one, cx, cy, half, gap);
+            Game.Pulse.pulses(one, cx, cy, half, CROWN - 2, gap, true, paint, 1);
+        });
     }
 
     function paintState(id) {

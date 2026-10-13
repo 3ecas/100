@@ -42,7 +42,7 @@ const CROWDED = 14;              // free squares at or under this: spend the bom
 /* ---- the settings to try ----------------------------------------------- */
 const SETTINGS = {
     base: {
-        note: "as the game is: no cap, no infinity, the dial at 8, the seam stopping at 20",
+        note: "as the game is: the ladder to 100, old numbers merging in pairs, the dial at 12, the seam stopping at 20",
         uncap: true,
         apply: function () {}
     },
@@ -377,6 +377,40 @@ const SETTINGS = {
         note: "the test build on a board 9 across and 9 high",
         uncap: true,
         apply: function (Game) { Game.Config.game.cols = 9; Game.Config.game.rows = 9; }
+    },
+    "mult-alt8": {
+        note: "bomb, x2, bomb, x3 from the dial at 8",
+        uncap: true,
+        mult: { cycle: ["bomb", "x2", "bomb", "x3"], protect: false },
+        apply: function (Game) { Game.Config.game.bombPace = 8; Game.Config.game.late.bombPace = 8; }
+    },
+    "mult-alt10+old2": {
+        note: "bomb, x2, bomb, x3 from the dial at 10, old numbers merging in pairs",
+        uncap: true,
+        mult: { cycle: ["bomb", "x2", "bomb", "x3"], protect: false },
+        apply: function (Game) { Game.Config.game.bombPace = 10; Game.Config.game.late.bombPace = 10; Game.Config.game.oldMergeAt = 2; }
+    },
+    "mult-alt12+old2": {
+        note: "bomb, x2, bomb, x3 from the dial at 12, old numbers merging in pairs",
+        uncap: true,
+        mult: { cycle: ["bomb", "x2", "bomb", "x3"], protect: false },
+        apply: function (Game) { Game.Config.game.bombPace = 12; Game.Config.game.late.bombPace = 12; Game.Config.game.oldMergeAt = 2; }
+    },
+    "mult-alt15+old2": {
+        note: "bomb, x2, bomb, x3 from the dial at 15, old numbers merging in pairs",
+        uncap: true,
+        mult: { cycle: ["bomb", "x2", "bomb", "x3"], protect: false },
+        apply: function (Game) { Game.Config.game.bombPace = 15; Game.Config.game.late.bombPace = 15; Game.Config.game.oldMergeAt = 2; }
+    },
+    "old2+dial12": {
+        note: "old numbers merge in pairs, the dial at 12",
+        uncap: true,
+        apply: function (Game) { Game.Config.game.bombPace = 12; Game.Config.game.late.bombPace = 12; Game.Config.game.oldMergeAt = 2; }
+    },
+    "blast2+dial18": {
+        note: "the bomb takes 5 x 5, the dial at 18",
+        uncap: true,
+        apply: function (Game) { Game.Config.game.bombPace = 18; Game.Config.game.late.bombPace = 18; Game.Config.game.blastReach = 2; }
     },
     "uncap+deal34": {
         note: "no cap, but the deal stops at 32-34: everything above is only built",
@@ -743,6 +777,7 @@ names.forEach(name => {
             " | top median " + quantile(tops, 0.5) + ", p90 " + quantile(tops, 0.9) + ", best " + tops[tops.length - 1] +
             " | score median " + big(quantile(scores, 0.5)) + ", p90 " + big(quantile(scores, 0.9)) + ", best " + big(scores[scores.length - 1]) +
             " | reach 58 " + (100 * results.filter(r => r.highest >= 58).length / RUNS).toFixed(0) + "%" +
+            " | reach 100 " + (100 * results.filter(r => r.highest >= 100).length / RUNS).toFixed(0) + "%" +
             " | drops median " + quantile(drops, 0.5) + ", p90 " + quantile(drops, 0.9) + " | endless " + (100 * endless / RUNS).toFixed(0) + "%" +
             "   (" + ((Date.now() - t0) / 1000).toFixed(0) + "s)");
         return;

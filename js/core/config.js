@@ -45,10 +45,11 @@ Game.Config = {
         // falling pieces go to the columns with the most room
         fallEven: true,
 
-        // 35s have nowhere to go: cashAt of them together cash in for
-        // cashBonus times their worth and leave the board. At Infinity they
-        // never leave, and the board is a square smaller for each one made.
-        cashAt: 3,
+        // The top of the ladder has nowhere to go: cashAt of them together
+        // cash in for cashBonus times their worth and leave the board. At
+        // Infinity they never leave — the 100 stands until it is blown up,
+        // which is how a run is won.
+        cashAt: Infinity,
         cashBonus: 2,
 
         // each link of a chain pays chainStep more, up to chainMost times
@@ -69,12 +70,16 @@ Game.Config = {
 
         // merges that fill the bomb dial: each merge your own moves make
         // counts one, chains link by link; merges set off by pieces falling
-        // in, or by a blast, do not count. The bomb is the one way to make
-        // room, and with no cap on the ladder it fills in eight: with the
-        // seam stopping at its 20 step, tools/sim.js (u-bomb8+seam20) has
-        // two runs in three pass 35, half reach the low 40s, and the best
-        // the high 80s.
-        bombPace: 8,
+        // in, or by a blast, do not count. The dial fills in twelve: with
+        // old numbers merging in pairs (oldMergeAt) and the seam stopping at
+        // its 20 step, tools/sim.js has the bot's typical run reach the 80s
+        // and one run in ten make the 100.
+        bombPace: 12,
+
+        // A number the hand no longer deals is old, and merges in this many
+        // instead of mergeAt — two old ones that touch become one of the
+        // next — so the numbers left behind by the climb can be cleared.
+        oldMergeAt: 2,
 
         // Infinity is out of the game. The piece and its sweep are still
         // here — set infinityFrom to a score and it falls in again with the
@@ -90,7 +95,7 @@ Game.Config = {
         // rest of the run. Both the same as below for now.
         late: {
             from: 25,
-            bombPace: 8,
+            bombPace: 12,
             infinityEvery: 80
         }
     }

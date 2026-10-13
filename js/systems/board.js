@@ -224,10 +224,12 @@ window.Game = window.Game || {};
     function wreck(lit) {
         var infinity = Game.Pieces.infinity.id;
         var salvage = 0;
+        var took = [];
         var gone = blast(lit).map(function (cell) {
             var was = Game.Pieces.byId(cell.piece);
             salvage += (was && was.points) || 0;
             if (cell.piece === infinity) owed += 1;
+            took.push(cell.piece);
             cell.piece = null;
             cell.fuse = 0;
             return cell.id;
@@ -236,6 +238,7 @@ window.Game = window.Game || {};
         return {
             type: "blast",
             cells: gone,
+            took: took,
             points: Math.round(salvage * (Game.Config.game.blastPays || 0)),
             board: snapshot()
         };

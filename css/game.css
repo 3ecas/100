@@ -718,6 +718,17 @@
     animation: tile-in 0.26s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
+/* the ready dial's light round the 100 on the board, reaching --crown-room
+   past the tile for the strokes to go (js/ui/boardview.js) */
+.tile__crown {
+    position: absolute;
+    inset: calc(-1 * var(--crown-room, 10px));
+    width: calc(100% + 2 * var(--crown-room, 10px));
+    height: calc(100% + 2 * var(--crown-room, 10px));
+    pointer-events: none;
+    z-index: 2;
+}
+
 /* rainbow dust blowing out over a bomb on the board (js/ui/boardview.js) */
 .tile__glow {
     position: absolute;

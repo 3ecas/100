@@ -53,11 +53,15 @@ window.Game = window.Game || {};
         }
         pendingOver = null;
 
-        // Game over, the run's score, and the best under it. Nothing else: a
-        // tap anywhere is the next run.
+        // Game over — or the 100 blown up, which is the run won — the run's
+        // score, and the best under it. Nothing else: a tap anywhere is the
+        // next run.
+        var won = detail.reason === "won";
+        var label = won ? "You blew up the 100" : "Game over";
         overHost.innerHTML =
-            '<div class="over__card" role="dialog" aria-label="Game over. Tap to play again.">' +
-            '<span class="over__label words">' + Game.Icons.words("Game over") + "</span>" +
+            '<div class="over__card' + (won ? " over__card--won" : "") + '" role="dialog" aria-label="' +
+            label + '. Tap to play again.">' +
+            '<span class="over__label words">' + Game.Icons.words(label) + "</span>" +
             '<span class="over__score">' + Game.Icons.number(detail.score) + "</span>" +
             '<span class="over__best">' +
             Game.Icons.number(detail.best, "Best " + detail.best) + "</span>" +

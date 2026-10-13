@@ -42,15 +42,16 @@ window.Game = window.Game || {};
         { id: "n35", name: "Thirty-five", icon: "n35", tint: "num num-35", points: 132000 }
     ];
 
-    // No cap: past 35 the ladder goes on, paying 1.4 times the one under it,
-    // as the top rungs always have, and walking the palette round again —
-    // 36 to 39 in the greens of 1 to 4, and so on — with every 35th number,
-    // 70 and 105, in the turning rainbow. TOP is beyond anything a 6 x 6
-    // board can hold.
-    var TOP = 200;
+    // Past 35 the ladder goes on to 100, the summit, each rung paying 1.4
+    // times the one under it as the top rungs always have. 36 to 99 walk the
+    // palette round again — 36 to 39 in the greens of 1 to 4, and so on —
+    // and the 100 wears the rainbow, as 35 does. Blowing the 100 up is how a
+    // run is won (js/systems/round.js).
+    var TOP = 100;
     for (var n = 36; n <= TOP; n++) {
         ladder.push({
-            id: "n" + n, name: String(n), icon: "n" + n, tint: "num num-" + (n % 35 || 35),
+            id: "n" + n, name: String(n), icon: "n" + n,
+            tint: "num num-" + (n === TOP ? 35 : (n - 36) % 34 + 1),
             points: Math.round(ladder[ladder.length - 1].points * 1.4)
         });
     }
@@ -115,6 +116,11 @@ window.Game = window.Game || {};
 
         byId: function (id) {
             return index[id] || null;
+        },
+
+        // the top of the ladder: the 100
+        top: function () {
+            return ladder[ladder.length - 1];
         },
 
         dealing: function (highestTier) {

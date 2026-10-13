@@ -307,6 +307,15 @@ window.Game = window.Game || {};
         }
     }
 
+    /* Whether a blast in these steps took the top of the ladder: blowing
+       the 100 up is the run won. */
+    function blown(result) {
+        var top = Game.Pieces.list[Game.Pieces.list.length - 1].id;
+        return !!result && (result.steps || []).some(function (step) {
+            return step.type === "blast" && (step.took || []).indexOf(top) !== -1;
+        });
+    }
+
     /* A full board ends the run, but not while a bomb is standing on it:
        every bomb goes off first, and the run carries on in the room that
        makes. Nor while infinity's sweep is still owed — naming a number makes
@@ -314,13 +323,17 @@ window.Game = window.Game || {};
     function stuck() {
         if (!Game.Board.isFull()) return false;
 
-        var blown = Game.Board.detonate();
-        if (blown && blown.steps.length) {
-            Game.Events.emit("game:rain", { steps: blown.steps, count: 0 });
-            absorb(blown);
+        var fired = Game.Board.detonate();
+        if (fired && fired.steps.length) {
+            Game.Events.emit("game:rain", { steps: fired.steps, count: 0 });
+            absorb(fired);
+            if (blown(fired)) won = true;
         }
         return Game.Board.isFull() && Game.Board.owes() <= 0;
     }
+
+    // set when a blast takes the 100, read once the turn's steps are in
+    var won = false;
 
     /* Everything that happens after a piece lands, whoever put it there.
        `free` is for a piece that arrives without costing the player a move. */
@@ -334,10 +347,13 @@ window.Game = window.Game || {};
 
         if (!free) closeTurn();
 
-        var blown = Game.Board.burn();
-        if (blown && blown.steps.length) {
-            Game.Events.emit("game:rain", { steps: blown.steps, count: 0 });
-            absorb(blown);
+        won = blown(result);
+
+        var fired = Game.Board.burn();
+        if (fired && fired.steps.length) {
+            Game.Events.emit("game:rain", { steps: fired.steps, count: 0 });
+            absorb(fired);
+            if (blown(fired)) won = true;
         }
 
         // before the sweep is asked for: infinity caught in a full board's last
@@ -351,7 +367,9 @@ window.Game = window.Game || {};
             Game.Events.emit("game:choosing", { owed: Game.Board.owes() });
         }
 
-        if (over) finish("full");
+        // the 100 blown up is the run won, whatever else the turn did
+        if (won) finish("won");
+        else if (over) finish("full");
         else keep();
 
         return result;
