@@ -61,14 +61,14 @@ Game.Config = {
         // a blast pays this share of what it destroys
         blastPays: 1,
 
-        // turns a bomb sits before it goes off, if no merge lights it first —
-        // and a column bomb, which nothing lights early
+        // turns a bomb sits before it goes off, if no merge lights it first
         bombFuse: 5,
 
         // Column bombs fall in with the seam: once the best number made
-        // reaches columnFrom, one every columnEvery drops. Each burns the
-        // fuse above and then clears its whole column, top to bottom, all
-        // but the 100 — so what is stacked on it while it burns goes too.
+        // reaches columnFrom, one every columnEvery drops. A column bomb has
+        // no fuse: it stays on the grid until a merge beside it (or a
+        // bomb's blast) sets it off, and then it clears its whole column,
+        // top to bottom, all but the 100 — so what is stacked on it goes too.
         columnFrom: 15,
         columnEvery: 40,
 

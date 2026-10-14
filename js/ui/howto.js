@@ -159,17 +159,18 @@ window.Game = window.Game || {};
         },
         {
             title: "Column bomb",
-            line: "Falls in now and then. In 5 turns it clears its column.",
+            line: "Falls in now and then. Merge next to it to clear its column.",
             hold: 560,
             frames: [
                 board({ 15: "n2", 16: "n3", 18: "n1", 19: "n2" }),
                 board(COLUMN, [17]),
                 board(plus(COLUMN, { 12: "n4" }), [12]),
                 board(plus(COLUMN, { 12: "n4", 7: "n5" }), [7]),
-                board(plus(COLUMN, { 12: "n4", 7: "n5", 2: "n6" }), [2]),
-                board(plus(COLUMN, { 12: "n4", 7: "n5", 2: "n6" }), [], [2, 7, 12, 17]),
-                board({ 15: "n2", 16: "n3", 18: "n1", 19: "n2" }),
-                board({ 15: "n2", 16: "n3", 18: "n1", 19: "n2" })
+                board(plus(COLUMN, { 12: "n4", 7: "n5", 13: "n1" }), [13]),
+                board(plus(COLUMN, { 12: "n4", 7: "n5", 13: "n1", 14: "n1" }), [14]),
+                board(plus(COLUMN, { 12: "n4", 7: "n5", 13: "n1", 14: "n1" }), [], [13, 14, 18, 17, 12, 7]),
+                board({ 15: "n2", 16: "n3", 18: "n2", 19: "n2" }),
+                board({ 15: "n2", 16: "n3", 18: "n2", 19: "n2" })
             ]
         },
         {

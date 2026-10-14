@@ -365,7 +365,9 @@ window.Game = window.Game || {};
                 sparked = touchOff(pair.eat);
                 if (sparked) steps.push(sparked);
 
-                var bombs = beside(pair.eat, Game.Pieces.bomb.id);
+                // a bomb, or a column bomb, beside the merge goes off
+                var bombs = beside(pair.eat, Game.Pieces.bomb.id)
+                    .concat(beside(pair.eat, Game.Pieces.column.id));
                 if (bombs.length) steps.push(wreck(bombs));
             }
 
@@ -500,8 +502,10 @@ window.Game = window.Game || {};
 
             var due = [];
 
+            // the bomb burns a fuse; the column bomb has none, and waits for
+            // a merge beside it
             cells.forEach(function (cell) {
-                if (!lit(cell.piece)) return;
+                if (cell.piece !== Game.Pieces.bomb.id) return;
                 cell.fuse = (cell.fuse || 0) + 1;
                 if (cell.fuse >= limit) due.push(cell);
             });
@@ -513,7 +517,7 @@ window.Game = window.Game || {};
         // does this before it ends the run.
         detonate: function () {
             var all = cells.filter(function (cell) {
-                return lit(cell.piece);
+                return cell.piece === Game.Pieces.bomb.id;
             });
 
             return all.length ? setOff(all) : null;
@@ -522,7 +526,7 @@ window.Game = window.Game || {};
         fuseAt: function (id) {
             var limit = Game.Config.game.bombFuse || 0;
             var cell = cells[id];
-            if (!limit || !cell || !lit(cell.piece)) return 0;
+            if (!limit || !cell || cell.piece !== Game.Pieces.bomb.id) return 0;
             return Math.min(1, (cell.fuse || 0) / limit);
         },
 
@@ -531,7 +535,7 @@ window.Game = window.Game || {};
         fuseLeft: function (id) {
             var limit = Game.Config.game.bombFuse || 0;
             var cell = cells[id];
-            if (!limit || !cell || !lit(cell.piece)) return Infinity;
+            if (!limit || !cell || cell.piece !== Game.Pieces.bomb.id) return Infinity;
             return Math.max(0, limit - (cell.fuse || 0));
         },
 

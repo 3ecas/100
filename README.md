@@ -42,9 +42,10 @@ piece and its sweep are still in the code, switched off in
 
 **The column bomb — the black tile with a white arrow pointing up and down.** Once you make
 a 15 it falls in with the seam, one every 40 drops. It joins nothing and
-nothing sets it off early: its fuse burns for 5 turns, then it clears its
-whole column, top to bottom — so whatever you stack on it while it burns
-goes too. It never takes the 100; only the bomb you charge can.
+has no fuse: it stays on the grid until a merge beside it sets it off (or
+your bomb's blast reaches it), and then it clears its whole column, top to
+bottom — so whatever you stacked on it goes too. It never takes the 100;
+only the bomb you charge can.
 
 **The 100 is the summit.** It wears the rainbow, and on the board the bomb
 dial's light pulses round it: the thing to blow up. A blast that takes the
