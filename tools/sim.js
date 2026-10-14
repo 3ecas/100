@@ -364,6 +364,78 @@ const SETTINGS = {
         uncap: true,
         apply: function (Game) { Game.Config.game.bombPace = 18; Game.Config.game.late.bombPace = 18; Game.Config.game.blastReach = 2; }
     },
+    "line-row25": {
+        note: "a line bomb every 25 drops from 10, clearing its row",
+        uncap: true,
+        lines: { every: 25, from: 10, kinds: ["row"] },
+        apply: function () {}
+    },
+    "line-col25": {
+        note: "a line bomb every 25 drops from 10, clearing its column",
+        uncap: true,
+        lines: { every: 25, from: 10, kinds: ["column"] },
+        apply: function () {}
+    },
+    "line-mix25": {
+        note: "a line bomb every 25 drops from 10, clearing its row or its column",
+        uncap: true,
+        lines: { every: 25, from: 10, kinds: ["row", "column"] },
+        apply: function () {}
+    },
+    "line-cross25": {
+        note: "a line bomb every 25 drops from 10, clearing its row and its column",
+        uncap: true,
+        lines: { every: 25, from: 10, kinds: ["cross"] },
+        apply: function () {}
+    },
+    "line-row40": {
+        note: "a line bomb every 40 drops from 10, clearing its row",
+        uncap: true,
+        lines: { every: 40, from: 10, kinds: ["row"] },
+        apply: function () {}
+    },
+    "line-col40": {
+        note: "a line bomb every 40 drops from 10, clearing its column",
+        uncap: true,
+        lines: { every: 40, from: 10, kinds: ["column"] },
+        apply: function () {}
+    },
+    "line-mix40": {
+        note: "a line bomb every 40 drops from 10, clearing its row or its column",
+        uncap: true,
+        lines: { every: 40, from: 10, kinds: ["row", "column"] },
+        apply: function () {}
+    },
+    "line-cross40": {
+        note: "a line bomb every 40 drops from 10, clearing its row and its column",
+        uncap: true,
+        lines: { every: 40, from: 10, kinds: ["cross"] },
+        apply: function () {}
+    },
+    "line-row60": {
+        note: "a line bomb every 60 drops from 10, clearing its row",
+        uncap: true,
+        lines: { every: 60, from: 10, kinds: ["row"] },
+        apply: function () {}
+    },
+    "line-col60": {
+        note: "a line bomb every 60 drops from 10, clearing its column",
+        uncap: true,
+        lines: { every: 60, from: 10, kinds: ["column"] },
+        apply: function () {}
+    },
+    "line-mix60": {
+        note: "a line bomb every 60 drops from 10, clearing its row or its column",
+        uncap: true,
+        lines: { every: 60, from: 10, kinds: ["row", "column"] },
+        apply: function () {}
+    },
+    "line-cross60": {
+        note: "a line bomb every 60 drops from 10, clearing its row and its column",
+        uncap: true,
+        lines: { every: 60, from: 10, kinds: ["cross"] },
+        apply: function () {}
+    },
     "uncap+deal34": {
         note: "no cap, but the deal stops at 32-34: everything above is only built",
         uncap: true,
@@ -497,6 +569,34 @@ function boot(apply, setting) {
     return Game;
 }
 
+/* A line bomb falling in: into the column with the most room, as the seam's
+   pieces do, and going off where it lands — `kind` row clears the row it
+   lands on, column the column under it, cross both. The columns settle. */
+function lineBomb(Game, kind) {
+    const s = Game.Config.game;
+    let col = -1, room = -1;
+    for (let x = 0; x < s.cols; x++) {
+        const spot = Game.Board.landing(x);
+        const r = spot ? spot.y + 1 : 0;
+        if (r > room || (r === room && Math.random() < 0.5)) { room = r; col = x; }
+    }
+    if (col < 0 || room <= 0) return;
+    const y = room - 1;
+    const board = Game.Board.snapshot().map((id, i) => {
+        const cx = i % s.cols, cy = Math.floor(i / s.cols);
+        const hit = (kind !== "column" && cy === y) || (kind !== "row" && cx === col);
+        return hit ? null : id;
+    });
+    const out = board.slice();
+    for (let x = 0; x < s.cols; x++) {
+        const kept = [];
+        for (let yy = 0; yy < s.rows; yy++) if (board[yy * s.cols + x]) kept.push(board[yy * s.cols + x]);
+        const shift = s.rows - kept.length;
+        for (let yy = 0; yy < s.rows; yy++) out[yy * s.cols + x] = yy >= shift ? kept[yy - shift] : null;
+    }
+    Game.Board.load(out);
+}
+
 /* x2 or x3 going off: every number that is a multiple of `k` leaves the
    board (sparing the hand's numbers if `protect`), and the columns settle */
 function multiples(Game, k, protect) {
@@ -625,6 +725,7 @@ function playRun(Game, setting) {
     let stuck = 0;
     let made35 = 0;
     let uses = 0;
+    const lineFired = {};
     let third35 = null;
     after = 0;
     const count = e => e.steps.forEach(st => {
@@ -640,6 +741,11 @@ function playRun(Game, setting) {
         const state = Game.Round.get();
         if (!state || !state.running) break;
         if (!AFTER && !setting.uncap && state.highest >= PEAK) break;
+        if (setting.lines && drops > 0 && drops % setting.lines.every === 0 && state.highest >= (setting.lines.from || 1) && !lineFired[drops]) {
+            lineFired[drops] = true;
+            const kinds = setting.lines.kinds;
+            lineBomb(Game, kinds[Math.floor(Math.random() * kinds.length)]);
+        }
         if (setting.tick) setting.tick(Game, drops);
 
         if (Game.Board.owes() > 0) {
