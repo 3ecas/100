@@ -416,8 +416,29 @@ window.Game = window.Game || {};
         playSteps(pending.shift(), 0, 0);
     }
 
+    /* the tile a tap meant: the one under it, or — for a tap in the gaps
+       between tiles or on the board's edge — the nearest one, so every bit of
+       the board picks a column */
+    function tileAt(event) {
+        var hit = event.target.closest && event.target.closest("[data-column]");
+        if (hit) return hit;
+
+        var x = event.clientX;
+        var y = event.clientY;
+        var best = null;
+        var bestGap = Infinity;
+        tiles.forEach(function (tile) {
+            var box = tile.getBoundingClientRect();
+            var dx = Math.max(box.left - x, 0, x - box.right);
+            var dy = Math.max(box.top - y, 0, y - box.bottom);
+            var gap = dx * dx + dy * dy;
+            if (gap < bestGap) { bestGap = gap; best = tile; }
+        });
+        return best;
+    }
+
     function columnOf(event) {
-        var tile = event.target.closest("[data-column]");
+        var tile = tileAt(event);
         return tile ? Number(tile.dataset.column) : -1;
     }
 
@@ -444,7 +465,7 @@ window.Game = window.Game || {};
         var round = Game.Round.get();
         if (!round || !round.running) return;
 
-        var tile = event.target.closest("[data-column]");
+        var tile = tileAt(event);
         if (!tile) return;
 
         if (choosing) {

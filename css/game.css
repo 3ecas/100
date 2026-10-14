@@ -557,6 +557,11 @@
     cursor: pointer;
 }
 
+/* the gaps between the tiles pick a column too (js/ui/boardview.js) */
+.board {
+    cursor: pointer;
+}
+
 /* While the board waits for a tap — a column for the bomb in hand, a number
    for infinity — the edge of the grid wears the ready dial's light: the
    rainbow going round it, and strokes going out past it (js/ui/boardview.js,
