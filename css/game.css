@@ -194,7 +194,15 @@
     height: 24px;
 }
 
-.tool:hover,
+/* lit under a pointer that can hover, and for the keyboard — never left lit
+   by a tap on a phone, which keeps :hover until the next tap elsewhere */
+@media (hover: hover) {
+    .tool:hover {
+        color: var(--ink);
+        background: rgba(255, 255, 255, 0.6);
+    }
+}
+
 .tool:focus-visible {
     color: var(--ink);
     background: rgba(255, 255, 255, 0.6);
