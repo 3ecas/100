@@ -2,10 +2,11 @@
    35 — the app icon, everywhere it is needed, drawn by a browser
    -----------------------------------------------------------------------------
    The icon is the top of the ladder: 100, in the game's own face (fonts/
-   Nunito.ttf), white, on the rings of every colour the 100 wears — the same
-   wheel as .num-100 in css/numbers.css, one wheel every 160% of the way from
-   the centre to the corner. Drawn on a canvas in headless Chromium, so the
-   face is the real one, and written out as PNGs by hand.
+   Nunito.ttf), white, on the wheel of every colour the 100 wears — the same
+   stops as .num-100 in css/numbers.css, round the clock from twelve, with a
+   soft white pool over the heart so the colours mix at the centre. Drawn on
+   a canvas in headless Chromium, so the face is the real one, and written
+   out as PNGs by hand.
 
    It writes:
      ios/App/App/Assets.xcassets/AppIcon.appiconset/AppIcon-512@2x.png
@@ -15,7 +16,7 @@
      android/app/src/main/res/mipmap-*dpi/ic_launcher.png             square, 48 to 192
      android/app/src/main/res/mipmap-*dpi/ic_launcher_round.png       round, on nothing
      android/app/src/main/res/mipmap-*dpi/ic_launcher_foreground.png  adaptive: the 100 alone
-     android/app/src/main/res/mipmap-*dpi/ic_launcher_background.png  adaptive: the rings
+     android/app/src/main/res/mipmap-*dpi/ic_launcher_background.png  adaptive: the wheel
      store/play/icon-512.png                 the Play listing icon (the site's too)
      store/play/feature-1024x500.png         the Play feature graphic
 
@@ -37,7 +38,8 @@ const store = path.join(root, "store", "play");
 
 const WHEEL = ["#df676b", "#d97230", "#bd8700", "#989900", "#5ba84a", "#00ab86",
                "#00a6ad", "#00a0d3", "#5991ed", "#927fe7", "#ba71cb", "#d4679f"];
-const PERIOD = 1.6;         // one wheel every this much of the way to the corner
+const POOL = 0.42;          // the soft centre reaches this far to the corner
+const MIX = 0.55;           // and is this white at its heart
 const SPAN = 0.74;          // the 100 spans this much of a square icon
 const GREY = "#eef0f3";     // --bg in css/theme.css: the launch screen
 
@@ -108,8 +110,8 @@ function plain(width, height, hex) {
 }
 
 /* ---- the drawing, in the browser ------------------------------------------------ */
-// spec: { w, h, rings, text, round, span } — rings and text each on or off,
-// round clips to the inscribed circle, span is how wide the 100 runs
+// spec: { w, h, rings, text, round, span } — the wheel and the text each
+// on or off, round clips to the inscribed circle, span is how wide the 100 runs
 function draw(spec) {
     const c = document.createElement("canvas");
     c.width = spec.w; c.height = spec.h;
@@ -120,11 +122,19 @@ function draw(spec) {
         g.beginPath(); g.arc(cx, cy, Math.min(cx, cy), 0, Math.PI * 2); g.clip();
     }
     if (spec.rings) {
+        // the wheel from twelve, clockwise — as the CSS conic gradient
+        const wheel = g.createConicGradient(-Math.PI / 2, cx, cy);
+        spec.wheel.forEach((hex, i) => wheel.addColorStop(i / 12, hex));
+        wheel.addColorStop(1, spec.wheel[0]);
+        g.fillStyle = wheel;
+        g.fillRect(0, 0, spec.w, spec.h);
+
+        // the soft pool over the heart, where the colours mix
         const far = Math.hypot(cx, cy);
-        const grad = g.createRadialGradient(cx, cy, 0, cx, cy, far * spec.period);
-        spec.wheel.forEach((hex, i) => grad.addColorStop(i / 12, hex));
-        grad.addColorStop(1, spec.wheel[0]);
-        g.fillStyle = grad;
+        const pool = g.createRadialGradient(cx, cy, 0, cx, cy, far * spec.pool);
+        pool.addColorStop(0, "rgba(255,255,255," + spec.mix + ")");
+        pool.addColorStop(1, "rgba(255,255,255,0)");
+        g.fillStyle = pool;
         g.fillRect(0, 0, spec.w, spec.h);
     }
     if (spec.text) {
@@ -156,7 +166,7 @@ async function main() {
     await page.evaluate(() => document.fonts.ready);
     await page.waitForFunction(() => document.fonts.check("900 40px Nunito"));
 
-    const render = async (spec) => Buffer.from(await page.evaluate(draw, Object.assign({ wheel: WHEEL, period: PERIOD }, spec)), "base64");
+    const render = async (spec) => Buffer.from(await page.evaluate(draw, Object.assign({ wheel: WHEEL, pool: POOL, mix: MIX }, spec)), "base64");
     const icon = (size, round) => render({ w: size, h: size, rings: true, text: "100", span: size * SPAN, round: !!round });
 
     // iOS: the icon with no alpha channel — App Store Connect rejects one — and the launch screen
