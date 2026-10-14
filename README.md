@@ -87,8 +87,7 @@ wheel — green, yellow, orange, red, pink, purple, violet, blue, and a deep tea
 for 33 to 36 — and the start of a run looks as easy as it plays while the top
 looks as hard as it is. The palette has 36 colours, so from 37 the numbers
 walk it round again. The 100 alone wears every colour, round the clock,
-turning slowly, with the colours mixing softly at its heart — and the app
-icon is the same picture. The shades are
+turning slowly — and the app icon is the same picture. The shades are
 made by `tools/palette.js`: the hues and the steps are set there, and
 `npm run palette` writes them into `css/numbers.css`. The bomb is the one
 piece that is not a number, and it does not look like one: black, with its 0

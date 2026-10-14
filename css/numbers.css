@@ -88,9 +88,7 @@
 /* The 100 wears the wheel, and the wheel turns: --turn is where the gradient
    starts from, taken slowly round wherever a 100 is painted. Registering it
    is what lets the angle interpolate; a browser that does not know @property
-   shows the wheel standing still. Over the heart of the wheel sits a soft
-   white-into-nothing pool, so the colours mix at the centre instead of
-   meeting at a point. The wheel's stops are kept apart in --wheel, which
+   shows the wheel standing still. The wheel's stops are kept apart in --wheel, which
    js/ui/icons.js reads for everything else painted in the rainbow, and
    tools/icon.js draws the same wheel on the app icon. */
 @property --turn {
@@ -109,8 +107,7 @@
         #5ba84a 120deg, #00ab86 150deg, #00a6ad 180deg, #00a0d3 210deg,
         #5991ed 240deg, #927fe7 270deg, #ba71cb 300deg, #d4679f 330deg,
         #df676b 360deg;
-    --num: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.55) 0%, rgba(255, 255, 255, 0) 42%),
-        conic-gradient(from var(--turn, 0deg), var(--wheel));
+    --num: conic-gradient(from var(--turn, 0deg), var(--wheel));
 }
 
 /* where the colour is painted on the piece itself, the turn is too */
@@ -180,8 +177,7 @@
 
 .tile.num-100 .tile__art svg.icon,
 .float.num-100 svg.icon {
-    background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.55) 0%, rgba(255, 255, 255, 0) 42%),
-        conic-gradient(from var(--turn, 0deg), var(--wheel));
+    background: conic-gradient(from var(--turn, 0deg), var(--wheel));
     animation: wheel-turn 14s linear infinite;
 }
 

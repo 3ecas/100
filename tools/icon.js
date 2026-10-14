@@ -3,9 +3,8 @@
    -----------------------------------------------------------------------------
    The icon is the top of the ladder: 100, in the game's own face (fonts/
    Nunito.ttf), white, on the wheel of every colour the 100 wears — the same
-   stops as .num-100 in css/numbers.css, round the clock from twelve, with a
-   soft white pool over the heart so the colours mix at the centre. Drawn on
-   a canvas in headless Chromium, so the face is the real one, and written
+   stops as .num-100 in css/numbers.css, round the clock from twelve. Drawn
+   on a canvas in headless Chromium, so the face is the real one, and written
    out as PNGs by hand.
 
    It writes:
@@ -38,8 +37,6 @@ const store = path.join(root, "store", "play");
 
 const WHEEL = ["#df676b", "#d97230", "#bd8700", "#989900", "#5ba84a", "#00ab86",
                "#00a6ad", "#00a0d3", "#5991ed", "#927fe7", "#ba71cb", "#d4679f"];
-const POOL = 0.42;          // the soft centre reaches this far to the corner
-const MIX = 0.55;           // and is this white at its heart
 const SPAN = 0.74;          // the 100 spans this much of a square icon
 const GREY = "#eef0f3";     // --bg in css/theme.css: the launch screen
 
@@ -129,13 +126,6 @@ function draw(spec) {
         g.fillStyle = wheel;
         g.fillRect(0, 0, spec.w, spec.h);
 
-        // the soft pool over the heart, where the colours mix
-        const far = Math.hypot(cx, cy);
-        const pool = g.createRadialGradient(cx, cy, 0, cx, cy, far * spec.pool);
-        pool.addColorStop(0, "rgba(255,255,255," + spec.mix + ")");
-        pool.addColorStop(1, "rgba(255,255,255,0)");
-        g.fillStyle = pool;
-        g.fillRect(0, 0, spec.w, spec.h);
     }
     if (spec.text) {
         let size = 100;
@@ -166,7 +156,7 @@ async function main() {
     await page.evaluate(() => document.fonts.ready);
     await page.waitForFunction(() => document.fonts.check("900 40px Nunito"));
 
-    const render = async (spec) => Buffer.from(await page.evaluate(draw, Object.assign({ wheel: WHEEL, pool: POOL, mix: MIX }, spec)), "base64");
+    const render = async (spec) => Buffer.from(await page.evaluate(draw, Object.assign({ wheel: WHEEL }, spec)), "base64");
     const icon = (size, round) => render({ w: size, h: size, rings: true, text: "100", span: size * SPAN, round: !!round });
 
     // iOS: the icon with no alpha channel — App Store Connect rejects one — and the launch screen
