@@ -119,8 +119,19 @@ function draw(spec) {
         g.beginPath(); g.arc(cx, cy, Math.min(cx, cy), 0, Math.PI * 2); g.clip();
     }
     if (spec.rings) {
-        // the wheel from twelve, clockwise — as the CSS conic gradient
-        const wheel = g.createConicGradient(-Math.PI / 2, cx, cy);
+        // the wheel from twelve, clockwise — as the CSS conic gradient — with
+        // its centre behind the first 0's stroke, where the 100 is drawn, so
+        // the point where every colour meets is never seen
+        let wx = cx;
+        if (spec.text) {
+            g.font = "900 100px Nunito";
+            const all = g.measureText(spec.text).width;
+            const one = g.measureText("1").width;
+            const zero = g.measureText("0").width;
+            const scale = spec.span / all;
+            wx = cx - spec.span / 2 + (one + zero * 0.3) * scale;
+        }
+        const wheel = g.createConicGradient(-Math.PI / 2, wx, cy);
         spec.wheel.forEach((hex, i) => wheel.addColorStop(i / 12, hex));
         wheel.addColorStop(1, spec.wheel[0]);
         g.fillStyle = wheel;
