@@ -40,7 +40,7 @@ swept a whole number off the board when set off — is out of the game; its
 piece and its sweep are still in the code, switched off in
 `js/core/config.js`.
 
-**The column bomb — the black tile with a white bar down it.** Once you make
+**The column bomb — the black tile with a white arrow pointing up and down.** Once you make
 a 10 it falls in with the seam, one every 50 drops. It joins nothing and
 nothing sets it off early: its fuse burns for 5 turns, then it clears its
 whole column, top to bottom — so whatever you stack on it while it burns

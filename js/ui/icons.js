@@ -112,9 +112,10 @@ window.Game = window.Game || {};
         // its colour, and the mark winks (the class)
         bomb: numeral(0, true),
 
-        // the column bomb: a white bar down the black tile, an arrowhead at
-        // each end — it takes the whole column
-        column: '<path class="mark" d="M12 4.5v15M8.5 8L12 4.5L15.5 8M8.5 16L12 19.5L15.5 16" style="fill:none;stroke:#fff;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round"/>',
+        // the column bomb: a bold white arrow pointing up and down on the black
+        // tile — it takes the whole column. It stands still; nothing about it
+        // winks.
+        column: '<path d="M10.6 8.2h2.8v7.6h-2.8z M12 3.2L16.6 8.6H7.4zM12 20.8L16.6 15.4H7.4z" style="fill:#fff;stroke:none"/>',
 
         infinity:
             '<path d="' + DIAMOND + '" fill="' + INK + '"/>' +
@@ -187,11 +188,8 @@ window.Game = window.Game || {};
             }
 
             if (name === "column") {
-                ctx.strokeStyle = "#fff";
-                ctx.lineWidth = 2.6;
-                ctx.lineCap = "round";
-                ctx.lineJoin = "round";
-                ctx.stroke(new Path2D("M12 4.5v15M8.5 8L12 4.5L15.5 8M8.5 16L12 19.5L15.5 16"));
+                ctx.fillStyle = "#fff";
+                ctx.fill(new Path2D("M10.6 8.2h2.8v7.6h-2.8z M12 3.2L16.6 8.6H7.4zM12 20.8L16.6 15.4H7.4z"));
                 return;
             }
 
