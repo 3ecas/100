@@ -481,6 +481,9 @@
        distance from the title above and the buttons below */
     min-height: 2.9em;
     margin: 0;
+    /* raised a touch: the title's box holds room for descenders its letters
+       mostly lack, so measured by the ink the gap above ran 3px wider */
+    transform: translateY(-3px);
     font-size: 0.8rem;
     color: rgba(255, 255, 255, 0.82);
 }
