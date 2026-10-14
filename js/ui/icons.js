@@ -1,34 +1,31 @@
 window.Game = window.Game || {};
 
 (function () {
-    /* The three buttons at the foot of the screen, drawn like the digits:
-       straight lines only, square ends, sharp corners — no curve anywhere. */
+    /* The buttons, drawn like the face: round ends, round corners, a curve
+       where a curve reads better (css/theme.css: svg.icon). */
     var line = {
-        // a speaker, and two steps of sound off it
+        // a speaker, and two waves of sound off it
         sound:
-            '<path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/>' +
-            '<path d="M15.5 9.5h1.5v5h-1.5"/>' +
-            '<path d="M18.5 7H21v10h-2.5"/>',
-
+            '<path d="M5 9.5h3l4-3.5v12l-4-3.5H5z"/>' +
+            '<path d="M15.5 9.5a3.5 3.5 0 0 1 0 5"/>' +
+            '<path d="M18 7a7 7 0 0 1 0 10"/>',
         mute:
-            '<path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/>' +
-            '<path d="M15.5 9.5l5 5M20.5 9.5l-5 5"/>',
-
+            '<path d="M5 9.5h3l4-3.5v12l-4-3.5H5z"/>' +
+            '<path d="M16 10l4 4M20 10l-4 4"/>',
         // start over: a circular arrow, going round again
         restart:
             '<path d="M15.5 5.9A7 7 0 1 1 8.5 5.9"/>' +
             '<path d="M5.3 5.6L8.5 5.9L7.2 8.8"/>',
-
         help:
-            '<path d="M8.5 9.5V6h7v6.5H12V15"/>' +
-            '<path d="M11 18h2v2h-2z" fill="currentColor" stroke="none"/>',
-
+            '<path d="M9 9.3a3 3 0 1 1 4.7 2.5c-1.2.8-1.7 1.5-1.7 2.9"/>' +
+            '<circle cx="12" cy="18.6" r="1.2" fill="currentColor" stroke="none"/>',
         close: '<path d="M6.5 6.5l11 11M17.5 6.5l-11 11"/>',
-
-        // about the game, on the web: three sliders, each with its square knob
+        // about the game, on the web: three sliders, each with its round knob
         settings:
             '<path d="M4 7h16M4 12h16M4 17h16"/>' +
-            '<path d="M8 5h3v4H8zM14 10h3v4h-3zM9 15h3v4H9z" fill="currentColor" stroke="none"/>'
+            '<circle cx="9" cy="7" r="2.3" fill="currentColor" stroke="none"/>' +
+            '<circle cx="15" cy="12" r="2.3" fill="currentColor" stroke="none"/>' +
+            '<circle cx="10" cy="17" r="2.3" fill="currentColor" stroke="none"/>'
     };
 
     /* ---- the numbers ------------------------------------------------------
