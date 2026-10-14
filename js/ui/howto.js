@@ -178,11 +178,11 @@ window.Game = window.Game || {};
             '<div class="how__stage" id="howStage"></div>' +
             '<h2 class="how__title words" id="howTitle"></h2>' +
             '<p class="how__line words" id="howLine"></p>' +
-            '<div class="how__steps" id="howSteps"></div>' +
             '<div class="how__acts">' +
             '<button type="button" class="how__skip words" id="howSkip"></button>' +
             '<button type="button" class="how__next words" id="howNext"></button>' +
             "</div>" +
+            '<div class="how__steps" id="howSteps"></div>' +
             "</div>";
 
         Game.Icons.hydrate(host);

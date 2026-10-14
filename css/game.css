@@ -477,7 +477,9 @@
 
 /* room for two lines, so the card holds still from page to page */
 .how__line {
-    min-height: 2.6em;
+    /* room for two lines, the text centred in it, so it sits the same
+       distance from the title above and the buttons below */
+    min-height: 2.9em;
     margin: 0;
     font-size: 0.8rem;
     color: rgba(255, 255, 255, 0.82);
@@ -508,7 +510,6 @@
 .how__acts {
     display: flex;
     gap: 10px;
-    margin-top: 4px;
 }
 
 .how__next,
