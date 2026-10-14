@@ -3,9 +3,11 @@
    -----------------------------------------------------------------------------
    The icon is the top of the ladder: 100, in the game's own face (fonts/
    Nunito.ttf), white, on the wheel of every colour the 100 wears — the same
-   stops as .num-100 in css/numbers.css, round the clock from twelve. Drawn
-   on a canvas in headless Chromium, so the face is the real one, and written
-   out as PNGs by hand.
+   stops as .num-100 in css/numbers.css — blurred until its centre and its
+   spokes dissolve into one soft sweep, as the 100 is on the board. Drawn on
+   a canvas in headless Chromium, so the face is the real one, and written
+   out as PNGs by hand. `--style diagonal` draws the wheel as one straight
+   sweep from corner to corner instead, and `--style wheel` the sharp wheel.
 
    It writes:
      ios/App/App/Assets.xcassets/AppIcon.appiconset/AppIcon-512@2x.png
@@ -38,6 +40,8 @@ const store = path.join(root, "store", "play");
 const WHEEL = ["#df676b", "#d97230", "#bd8700", "#989900", "#5ba84a", "#00ab86",
                "#00a6ad", "#00a0d3", "#5991ed", "#927fe7", "#ba71cb", "#d4679f"];
 const SPAN = 0.74;          // the 100 spans this much of a square icon
+const SOFT = 0.167;         // the blur, as a share of the icon's size
+const STYLE = (process.argv.find(a => a.startsWith("--style=")) || "--style=blur").slice(8);
 const GREY = "#eef0f3";     // --bg in css/theme.css: the launch screen
 
 function playwright() {
@@ -119,24 +123,30 @@ function draw(spec) {
         g.beginPath(); g.arc(cx, cy, Math.min(cx, cy), 0, Math.PI * 2); g.clip();
     }
     if (spec.rings) {
-        // the wheel from twelve, clockwise — as the CSS conic gradient — with
-        // its centre behind the first 0's stroke, where the 100 is drawn, so
-        // the point where every colour meets is never seen
-        let wx = cx;
-        if (spec.text) {
-            g.font = "900 100px Nunito";
-            const all = g.measureText(spec.text).width;
-            const one = g.measureText("1").width;
-            const zero = g.measureText("0").width;
-            const scale = spec.span / all;
-            wx = cx - spec.span / 2 + (one + zero * 0.3) * scale;
+        const far = Math.max(spec.w, spec.h);
+        if (spec.style === "diagonal") {
+            // one straight sweep through every colour, corner to corner
+            const grad = g.createLinearGradient(0, 0, spec.w, spec.h);
+            spec.wheel.forEach((hex, i) => grad.addColorStop(i / 12, hex));
+            grad.addColorStop(1, spec.wheel[0]);
+            g.fillStyle = grad;
+            g.fillRect(0, 0, spec.w, spec.h);
+        } else {
+            // the wheel from twelve, clockwise — as the CSS conic gradient —
+            // drawn larger than the picture and blurred over it, so the blur
+            // never thins at the edges
+            const off = document.createElement("canvas");
+            off.width = spec.w; off.height = spec.h;
+            const o = off.getContext("2d");
+            const wheel = o.createConicGradient(-Math.PI / 2, cx, cy);
+            spec.wheel.forEach((hex, i) => wheel.addColorStop(i / 12, hex));
+            wheel.addColorStop(1, spec.wheel[0]);
+            o.fillStyle = wheel;
+            o.fillRect(0, 0, spec.w, spec.h);
+            if (spec.style === "blur") g.filter = "blur(" + Math.round(far * spec.soft) + "px)";
+            g.drawImage(off, -spec.w * 0.3, -spec.h * 0.3, spec.w * 1.6, spec.h * 1.6);
+            g.filter = "none";
         }
-        const wheel = g.createConicGradient(-Math.PI / 2, wx, cy);
-        spec.wheel.forEach((hex, i) => wheel.addColorStop(i / 12, hex));
-        wheel.addColorStop(1, spec.wheel[0]);
-        g.fillStyle = wheel;
-        g.fillRect(0, 0, spec.w, spec.h);
-
     }
     if (spec.text) {
         let size = 100;
@@ -167,7 +177,7 @@ async function main() {
     await page.evaluate(() => document.fonts.ready);
     await page.waitForFunction(() => document.fonts.check("900 40px Nunito"));
 
-    const render = async (spec) => Buffer.from(await page.evaluate(draw, Object.assign({ wheel: WHEEL }, spec)), "base64");
+    const render = async (spec) => Buffer.from(await page.evaluate(draw, Object.assign({ wheel: WHEEL, soft: SOFT, style: STYLE }, spec)), "base64");
     const icon = (size, round) => render({ w: size, h: size, rings: true, text: "100", span: size * SPAN, round: !!round });
 
     // iOS: the icon with no alpha channel — App Store Connect rejects one — and the launch screen

@@ -88,11 +88,14 @@
 /* The 100 wears the wheel, and the wheel turns: --turn is where the gradient
    starts from, taken slowly round wherever a 100 is painted. Registering it
    is what lets the angle interpolate; a browser that does not know @property
-   shows the wheel standing still. The wheel's centre, where every colour
-   meets at a point, sits a little left of the middle, behind the first 0's
-   stroke, so the point itself is never seen. The stops are kept apart in --wheel, which
+   shows the wheel standing still. The wheel is blurred until its centre and
+   its spokes dissolve into one soft sweep of every colour: it is painted on
+   a layer behind the number, larger than the piece and clipped to it, so
+   the blur never thins at the edges. --blur is the softening, set by the
+   size of the piece. The wheel's stops are kept apart in --wheel, which
    js/ui/icons.js reads for everything else painted in the rainbow, and
-   tools/icon.js draws the same wheel on the app icon. */
+   tools/icon.js draws the same blurred wheel on the app icon (and keeps a
+   plain diagonal rainbow a flag away). */
 @property --turn {
     syntax: "<angle>";
     inherits: false;
@@ -109,15 +112,47 @@
         #5ba84a 120deg, #00ab86 150deg, #00a6ad 180deg, #00a0d3 210deg,
         #5991ed 240deg, #927fe7 270deg, #ba71cb 300deg, #d4679f 330deg,
         #df676b 360deg;
-    --num: conic-gradient(from var(--turn, 0deg) at 44% 50%, var(--wheel));
+    --num: #9b8fd6;     /* under the blurred wheel, where it is painted */
+    --blur: 10px;
 }
 
-/* where the colour is painted on the piece itself, the turn is too */
+/* the blurred wheel: a layer behind the number, wherever a 100 is painted */
 .slot.num-100,
 .how__cell.num-100,
 .about__tile.num-100,
-.scoreboard__top.num-100 {
+.scoreboard__top.num-100,
+.tile.num-100 .tile__art {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+}
+
+.slot.num-100::before,
+.how__cell.num-100::before,
+.about__tile.num-100::before,
+.scoreboard__top.num-100::before,
+.tile.num-100 .tile__art::before {
+    content: "";
+    position: absolute;
+    inset: -45%;
+    z-index: -1;
+    background: conic-gradient(from var(--turn, 0deg), var(--wheel));
+    filter: blur(var(--blur));
     animation: wheel-turn 14s linear infinite;
+    pointer-events: none;
+}
+
+.how__cell.num-100 { --blur: 6px; }
+.scoreboard__top.num-100 { --blur: 4px; }
+.about__tile.num-100 { --blur: 16px; }
+
+/* the sign and the number sit above the layer */
+.slot.num-100 > *,
+.how__cell.num-100 > *,
+.about__tile.num-100 > *,
+.scoreboard__top.num-100 > *,
+.tile.num-100 .tile__art > * {
+    position: relative;
 }
 
 /* ---- on the board ---------------------------------------------------------
@@ -170,16 +205,10 @@
     background: var(--num);
 }
 
-/* On the board the art arrives, falls and pops with animations of its own,
-   and the chip flies: there the turning wheel is painted on the sign inside
-   instead, which fills the art and has no animation to lose. */
-.tile.num-100 .tile__art {
-    background: none;
-}
-
-.tile.num-100 .tile__art svg.icon,
+/* the chip riding with the points is too small and quick to blur: the plain
+   wheel, turning */
 .float.num-100 svg.icon {
-    background: conic-gradient(from var(--turn, 0deg) at 44% 50%, var(--wheel));
+    background: conic-gradient(from var(--turn, 0deg), var(--wheel));
     animation: wheel-turn 14s linear infinite;
 }
 
