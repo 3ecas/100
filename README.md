@@ -41,7 +41,7 @@ piece and its sweep are still in the code, switched off in
 `js/core/config.js`.
 
 **The column bomb — the black tile with a white arrow pointing up and down.** Once you make
-a 25 it falls in with the seam, one every 50 drops. It joins nothing and
+a 15 it falls in with the seam, one every 40 drops. It joins nothing and
 nothing sets it off early: its fuse burns for 5 turns, then it clears its
 whole column, top to bottom — so whatever you stack on it while it burns
 goes too. It never takes the 100; only the bomb you charge can.
