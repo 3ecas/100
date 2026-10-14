@@ -70,7 +70,7 @@ Game.Config = {
         // bomb's blast) sets it off, and then it clears its whole column,
         // top to bottom, all but the 100 — so what is stacked on it goes too.
         columnFrom: 15,
-        columnEvery: 40,
+        columnEvery: 30,
 
         // how far the blast reaches from the bomb, corners included. At 1 it
         // takes the eight squares around it and nothing further out.

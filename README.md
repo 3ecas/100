@@ -41,7 +41,7 @@ piece and its sweep are still in the code, switched off in
 `js/core/config.js`.
 
 **The column bomb — the black tile with a white arrow pointing up and down.** Once you make
-a 15 it falls in with the seam, one every 40 drops. It joins nothing and
+a 15 it falls in with the seam, one every 30 drops. It joins nothing and
 has no fuse: it stays on the grid until a merge beside it sets it off (or
 your bomb's blast reaches it), and then it clears its whole column, top to
 bottom — so whatever you stacked on it goes too. It never takes the 100;
