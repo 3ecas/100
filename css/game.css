@@ -1091,7 +1091,7 @@
 .scoreboard__value .num-text { font-weight: 800; }
 .scoreboard__best .num-text { font-weight: 500; }
 .scoreboard__ask .word { font-weight: 600; }
-.tool__say .word { font-weight: 600; }
+.tool__say .word { font-weight: 600; white-space: nowrap; text-wrap: nowrap; }
 .how__title .word { font-weight: 800; }
 .how__line .word { font-weight: 400; }
 .how__next .word,

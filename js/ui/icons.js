@@ -14,10 +14,10 @@ window.Game = window.Game || {};
             '<path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/>' +
             '<path d="M15.5 9.5l5 5M20.5 9.5l-5 5"/>',
 
-        // start over: back to the start — a bar, and a turn pointing at it
+        // start over: a circular arrow, going round again
         restart:
-            '<path d="M6 6v12"/>' +
-            '<path d="M18 6v12l-8-6z"/>',
+            '<path d="M15.5 5.9A7 7 0 1 1 8.5 5.9"/>' +
+            '<path d="M5.3 5.6L8.5 5.9L7.2 8.8"/>',
 
         help:
             '<path d="M8.5 9.5V6h7v6.5H12V15"/>' +
