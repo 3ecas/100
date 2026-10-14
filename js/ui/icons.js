@@ -115,7 +115,7 @@ window.Game = window.Game || {};
         // the column bomb: a bold white arrow pointing up and down on the black
         // tile — it takes the whole column. It stands still; nothing about it
         // winks.
-        column: '<path d="M10.6 8.2h2.8v7.6h-2.8z M12 3.2L16.6 8.6H7.4zM12 20.8L16.6 15.4H7.4z" style="fill:#fff;stroke:none"/>',
+        column: '<path d="M12 3.2L16.6 8.6H13.4V15.4H16.6L12 20.8L7.4 15.4H10.6V8.6H7.4Z" style="fill:#fff;stroke:none"/>',
 
         infinity:
             '<path d="' + DIAMOND + '" fill="' + INK + '"/>' +
@@ -189,7 +189,7 @@ window.Game = window.Game || {};
 
             if (name === "column") {
                 ctx.fillStyle = "#fff";
-                ctx.fill(new Path2D("M10.6 8.2h2.8v7.6h-2.8z M12 3.2L16.6 8.6H7.4zM12 20.8L16.6 15.4H7.4z"));
+                ctx.fill(new Path2D("M12 3.2L16.6 8.6H13.4V15.4H16.6L12 20.8L7.4 15.4H10.6V8.6H7.4Z"));
                 return;
             }
 

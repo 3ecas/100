@@ -41,7 +41,7 @@ piece and its sweep are still in the code, switched off in
 `js/core/config.js`.
 
 **The column bomb — the black tile with a white arrow pointing up and down.** Once you make
-a 10 it falls in with the seam, one every 50 drops. It joins nothing and
+a 25 it falls in with the seam, one every 50 drops. It joins nothing and
 nothing sets it off early: its fuse burns for 5 turns, then it clears its
 whole column, top to bottom — so whatever you stack on it while it burns
 goes too. It never takes the 100; only the bomb you charge can.
@@ -99,8 +99,7 @@ plain diagonal rainbow instead with `--style=diagonal`). The shades are
 made by `tools/palette.js`: the hues and the steps are set there, and
 `npm run palette` writes them into `css/numbers.css`. The bomb is the one
 piece that is not a number, and it does not look like one: black, with its 0
-in white and rainbow dust blowing out from its centre to its sides, a colour
-explosion held in, and it shakes harder through its last three turns. While
+in white, and it shakes harder through its last three turns. While
 the board waits for the column the bomb in hand goes to, the edge of the grid
 wears the dial's light, the rainbow going round it and strokes going out past
 it, and a line under the score says what is wanted.

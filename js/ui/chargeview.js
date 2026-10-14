@@ -70,10 +70,6 @@ window.Game = window.Game || {};
         ctx.fillRect(cx - r, level, span, cy + r - level);
         ctx.globalAlpha = 1;
 
-        // the dust rises through what is filled; once ready it blows out from
-        // the centre instead
-        if (one.ready) Game.Pulse.blow(light, gap, cx, cy, r);
-        else Game.Pulse.dust(light, gap, cx - r, top, span, span, level, false);
         ctx.restore();
 
         // white strokes while filling, the fuller the clearer; the bomb's own

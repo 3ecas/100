@@ -44,23 +44,6 @@ window.Game = window.Game || {};
         paintBoard(Game.Board.snapshot());
     }
 
-    /* A bomb on the board has rainbow dust blowing out from its centre, as
-       the ready dial has inside (js/ui/pulse.js): a canvas over the tile,
-       drawn as long as the bomb stands there. */
-    function glow(tile) {
-        var canvas = document.createElement("canvas");
-        canvas.className = "tile__glow";
-        canvas.setAttribute("aria-hidden", "true");
-        tile.appendChild(canvas);
-        if (!canvas.getContext) return;
-
-        tile.glow = Game.Pulse.make(canvas, false, function (one, gap) {
-            one.ctx.clearRect(0, 0, one.wide, one.tall);
-            Game.Pulse.blow(one, gap, one.wide / 2, one.tall / 2,
-                            Math.min(one.wide, one.tall) / 2);
-        });
-    }
-
     /* While the board waits for a tap — a column for the bomb in hand, a
        number for infinity — the edge of the grid wears the ready dial's light
        (js/ui/pulse.js): the rainbow going round it and pulsing, and strokes
@@ -129,7 +112,6 @@ window.Game = window.Game || {};
             '<span class="tile__art">' + Game.Icons.svg(art.icon) + "</span>";
         tile.setAttribute("aria-label", art.name);
 
-        if (piece === Game.Pieces.bomb.id) glow(tile);
         if (piece === Game.Pieces.top().id) crown(tile);
     }
 

@@ -69,7 +69,7 @@ Game.Config = {
         // reaches columnFrom, one every columnEvery drops. Each burns the
         // fuse above and then clears its whole column, top to bottom, all
         // but the 100 — so what is stacked on it while it burns goes too.
-        columnFrom: 10,
+        columnFrom: 25,
         columnEvery: 50,
 
         // how far the blast reaches from the bomb, corners included. At 1 it
