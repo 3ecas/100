@@ -129,7 +129,7 @@ window.Game = window.Game || {};
             '<span class="tile__art">' + Game.Icons.svg(art.icon) + "</span>";
         tile.setAttribute("aria-label", art.name);
 
-        if (piece === Game.Pieces.bomb.id) glow(tile);
+        if (piece === Game.Pieces.bomb.id || piece === Game.Pieces.column.id) glow(tile);
         if (piece === Game.Pieces.top().id) crown(tile);
     }
 

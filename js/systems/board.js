@@ -169,6 +169,11 @@ window.Game = window.Game || {};
         return hit;
     }
 
+    // the pieces that burn a fuse and go off: the bomb, and the column bomb
+    function lit(piece) {
+        return piece === Game.Pieces.bomb.id || piece === Game.Pieces.column.id;
+    }
+
     function blast(bombs) {
         var gone = {};
         var fired = {};
@@ -179,6 +184,19 @@ window.Game = window.Game || {};
             if (fired[bomb.id]) continue;
             fired[bomb.id] = true;
             gone[bomb.id] = bomb;
+
+            // A column bomb takes its whole column, top to bottom — all but
+            // the 100, which only the bomb you charge can take.
+            if (bomb.piece === Game.Pieces.column.id) {
+                for (var y = 0; y < rows; y++) {
+                    var inLine = at(bomb.x, y);
+                    if (!inLine || !inLine.piece || inLine === bomb) continue;
+                    if (inLine.piece === Game.Pieces.top().id) continue;
+                    gone[inLine.id] = inLine;
+                    if (lit(inLine.piece) && !fired[inLine.id]) queue.push(inLine);
+                }
+                continue;
+            }
 
             // A square, not a cross: every cell within `blastReach` of the
             // bomb, corners included. At 1 that is the eight squares around
@@ -193,7 +211,7 @@ window.Game = window.Game || {};
                     if (!near || !near.piece) continue;
 
                     gone[near.id] = near;
-                    if (near.piece === Game.Pieces.bomb.id && !fired[near.id]) {
+                    if (lit(near.piece) && !fired[near.id]) {
                         queue.push(near);
                     }
                 }
@@ -480,33 +498,31 @@ window.Game = window.Game || {};
             var limit = Game.Config.game.bombFuse || 0;
             if (!limit) return null;
 
-            var bomb = Game.Pieces.bomb.id;
-            var lit = [];
+            var due = [];
 
             cells.forEach(function (cell) {
-                if (cell.piece !== bomb) return;
+                if (!lit(cell.piece)) return;
                 cell.fuse = (cell.fuse || 0) + 1;
-                if (cell.fuse >= limit) lit.push(cell);
+                if (cell.fuse >= limit) due.push(cell);
             });
 
-            return lit.length ? setOff(lit) : null;
+            return due.length ? setOff(due) : null;
         },
 
         // Every bomb on the board at once, fuse or no fuse. A full board
         // does this before it ends the run.
         detonate: function () {
-            var bomb = Game.Pieces.bomb.id;
-            var lit = cells.filter(function (cell) {
-                return cell.piece === bomb;
+            var all = cells.filter(function (cell) {
+                return lit(cell.piece);
             });
 
-            return lit.length ? setOff(lit) : null;
+            return all.length ? setOff(all) : null;
         },
 
         fuseAt: function (id) {
             var limit = Game.Config.game.bombFuse || 0;
             var cell = cells[id];
-            if (!limit || !cell || cell.piece !== Game.Pieces.bomb.id) return 0;
+            if (!limit || !cell || !lit(cell.piece)) return 0;
             return Math.min(1, (cell.fuse || 0) / limit);
         },
 
@@ -515,7 +531,7 @@ window.Game = window.Game || {};
         fuseLeft: function (id) {
             var limit = Game.Config.game.bombFuse || 0;
             var cell = cells[id];
-            if (!limit || !cell || cell.piece !== Game.Pieces.bomb.id) return Infinity;
+            if (!limit || !cell || !lit(cell.piece)) return Infinity;
             return Math.max(0, limit - (cell.fuse || 0));
         },
 

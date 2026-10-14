@@ -75,6 +75,7 @@ window.Game = window.Game || {};
     var FLOOR_2 = { 16: "n1", 17: "n1" };
     var CHAIN = { 15: "n2", 16: "n2", 17: "n1", 18: "n1" };
     var BOMB = { 13: "n2", 14: "n2", 15: "n1", 16: "n1", 18: "bomb", 19: "n3" };
+    var COLUMN = { 15: "n2", 16: "n3", 17: "column", 18: "n1", 19: "n2" };
 
     var PAGES = [
         {
@@ -154,6 +155,21 @@ window.Game = window.Game || {};
                 board({ 13: "n2", 14: "n2", 15: "n2", 18: "bomb", 19: "n3" }, [], [13, 14, 18, 19]),
                 board({ 15: "n2" }),
                 board({ 15: "n2" })
+            ]
+        },
+        {
+            title: "Column bomb",
+            line: "Falls in now and then. In 5 turns it clears its column.",
+            hold: 560,
+            frames: [
+                board({ 15: "n2", 16: "n3", 18: "n1", 19: "n2" }),
+                board(COLUMN, [17]),
+                board(plus(COLUMN, { 12: "n4" }), [12]),
+                board(plus(COLUMN, { 12: "n4", 7: "n5" }), [7]),
+                board(plus(COLUMN, { 12: "n4", 7: "n5", 2: "n6" }), [2]),
+                board(plus(COLUMN, { 12: "n4", 7: "n5", 2: "n6" }), [], [2, 7, 12, 17]),
+                board({ 15: "n2", 16: "n3", 18: "n1", 19: "n2" }),
+                board({ 15: "n2", 16: "n3", 18: "n1", 19: "n2" })
             ]
         },
         {

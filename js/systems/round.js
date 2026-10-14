@@ -46,6 +46,7 @@ window.Game = window.Game || {};
             runId: state.runId,
             runLen: state.runLen,
             lastInfinity: state.lastInfinity,
+            lastColumn: state.lastColumn,
             hand: state.hand.map(function (piece) { return piece.id; }),
             bag: state.bag.slice(),
             board: Game.Board.snapshot()
@@ -247,12 +248,25 @@ window.Game = window.Game || {};
         });
     }
 
+    /* the column bomb's turn: once the best number made reaches columnFrom,
+       one falls in every columnEvery drops — the first a full gap after */
+    function columnDue() {
+        var s = settings();
+        if (!s.columnEvery || state.highest < (s.columnFrom || 1)) return false;
+        if (state.lastColumn === null) {
+            state.lastColumn = state.placed;
+            return false;
+        }
+        return state.placed - state.lastColumn >= s.columnEvery;
+    }
+
     function rain() {
         var count = roomFor(fallCount());
         var made = [];
         var steps = [];
         var points = 0;
         var infinities = 0;
+        var columns = 0;
 
         for (var i = 0; i < count; i++) {
             var open = [];
@@ -268,8 +282,16 @@ window.Game = window.Game || {};
                 state.lastInfinity = state.placed;
             }
 
+            // one column bomb at most in a fall, when it is due
+            var line = !special && !columns && columnDue();
+            if (line) {
+                columns++;
+                state.lastColumn = state.placed;
+            }
+
             var piece = special
                 ? Game.Pieces.infinity
+                : line ? Game.Pieces.column
                 : Game.Pieces.randomFor(state.highest);
 
             var pool = evened(open);
@@ -468,6 +490,7 @@ window.Game = window.Game || {};
                 runId: null,
                 runLen: 0,
                 lastInfinity: null,
+                lastColumn: null,
                 bomb: 0,
                 best: save.best,
                 bestTop: save.bestTop,
@@ -513,6 +536,7 @@ window.Game = window.Game || {};
                 runId: game.runId || null,
                 runLen: game.runLen || 0,
                 lastInfinity: typeof game.lastInfinity === "number" ? game.lastInfinity : null,
+                lastColumn: typeof game.lastColumn === "number" ? game.lastColumn : null,
                 bomb: game.bomb || 0,
                 best: save.best,
                 bestTop: save.bestTop,

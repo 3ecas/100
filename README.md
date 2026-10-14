@@ -40,6 +40,12 @@ swept a whole number off the board when set off — is out of the game; its
 piece and its sweep are still in the code, switched off in
 `js/core/config.js`.
 
+**The column bomb — the black tile with a white bar down it.** Once you make
+a 10 it falls in with the seam, one every 50 drops. It joins nothing and
+nothing sets it off early: its fuse burns for 5 turns, then it clears its
+whole column, top to bottom — so whatever you stack on it while it burns
+goes too. It never takes the 100; only the bomb you charge can.
+
 **The 100 is the summit.** It wears the rainbow, and on the board the bomb
 dial's light pulses round it: the thing to blow up. A blast that takes the
 100 wins the run — the end card says so — and until then the run goes on,
@@ -61,7 +67,7 @@ bomb sit side by side under it. When the board fills, the end card shows "game
 over", the run's score, and the best under it; a tap anywhere starts the next
 run.
 
-**How to play** is six short pages, a line each, played out on a little grid
+**How to play** is seven short pages, a line each, played out on a little grid
 of the game's own pieces — dropping, three making one, chains, numbers falling
 in, the bomb, and the climb to the 100 — with the same shattering as the
 game.

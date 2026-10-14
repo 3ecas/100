@@ -61,8 +61,16 @@ Game.Config = {
         // a blast pays this share of what it destroys
         blastPays: 1,
 
-        // turns a bomb sits before it goes off, if no merge lights it first
+        // turns a bomb sits before it goes off, if no merge lights it first —
+        // and a column bomb, which nothing lights early
         bombFuse: 5,
+
+        // Column bombs fall in with the seam: once the best number made
+        // reaches columnFrom, one every columnEvery drops. Each burns the
+        // fuse above and then clears its whole column, top to bottom, all
+        // but the 100 — so what is stacked on it while it burns goes too.
+        columnFrom: 10,
+        columnEvery: 50,
 
         // how far the blast reaches from the bomb, corners included. At 1 it
         // takes the eight squares around it and nothing further out.

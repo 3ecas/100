@@ -84,7 +84,19 @@ window.Game = window.Game || {};
         points: 0
     };
 
-    var index = { bomb: bomb, infinity: infinity };
+    // falls in with the seam now and then; when its fuse runs out it clears
+    // its whole column, top to bottom — all but the 100
+    var column = {
+        id: "column",
+        name: "Column bomb",
+        icon: "column",
+        tint: "num num-0 num-col",
+        tier: 0,
+        next: null,
+        points: 0
+    };
+
+    var index = { bomb: bomb, infinity: infinity, column: column };
     ladder.forEach(function (piece) {
         index[piece.id] = piece;
     });
@@ -113,6 +125,7 @@ window.Game = window.Game || {};
         list: ladder,
         bomb: bomb,
         infinity: infinity,
+        column: column,
 
         byId: function (id) {
             return index[id] || null;
