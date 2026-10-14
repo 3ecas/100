@@ -436,6 +436,12 @@ const SETTINGS = {
         lines: { every: 60, from: 10, kinds: ["cross"] },
         apply: function () {}
     },
+    smart: {
+        note: "the game as it is, played by the smarter bot (tries every column)",
+        uncap: true,
+        smart: true,
+        apply: function () {}
+    },
     "uncap+deal34": {
         note: "no cap, but the deal stops at 32-34: everything above is only built",
         uncap: true,
@@ -725,6 +731,9 @@ function playRun(Game, setting) {
     let stuck = 0;
     let made35 = 0;
     let uses = 0;
+    let smartBot = null;
+    let won = false;
+    Game.Events.on("game:over", d => { if (d.reason === "won") won = true; });
     const lineFired = {};
     let third35 = null;
     after = 0;
@@ -763,6 +772,20 @@ function playRun(Game, setting) {
                 continue;
             }
         }
+        if (setting.smart) {
+            const bot = smartBot || (smartBot = require("./smartbot.js")(Game, process.env.W ? JSON.parse(process.env.W) : null));
+            const aimAt = bot.wantsBomb();
+            if (aimAt && Game.Charges.toggle("bomb")) {
+                if (!Game.Charges.aim(aimAt)) Game.Charges.disarm();
+                continue;
+            }
+            const piece = state.hand[0];
+            if (!piece) break;
+            const col = bot.bestColumn(piece.id);
+            if (col < 0 || !Game.Round.play(col)) { stuck++; if (stuck > 5) break; continue; }
+            stuck = 0; drops++;
+            continue;
+        }
         if (Game.Charges.bomb.ready() && Game.Board.empties().length <= CROWDED) {
             if (setting.mult) uses++;
             const spot = bombSpot(Game);
@@ -782,7 +805,7 @@ function playRun(Game, setting) {
 
     const state = Game.Round.get();
     if (off && typeof off === "function") off();
-    return { highest: state.highest, drops: drops, score: state.score, made35: made35, third35: third35,
+    return { won: won, highest: state.highest, drops: drops, score: state.score, made35: made35, third35: third35,
              reached: AFTER ? drops >= AFTER_CAP : state.highest >= PEAK };
 }
 
@@ -836,6 +859,7 @@ names.forEach(name => {
             " | score median " + big(quantile(scores, 0.5)) + ", p90 " + big(quantile(scores, 0.9)) + ", best " + big(scores[scores.length - 1]) +
             " | reach 58 " + (100 * results.filter(r => r.highest >= 58).length / RUNS).toFixed(0) + "%" +
             " | reach 100 " + (100 * results.filter(r => r.highest >= 100).length / RUNS).toFixed(0) + "%" +
+            " | won " + (100 * results.filter(r => r.won).length / RUNS).toFixed(0) + "%" +
             " | drops median " + quantile(drops, 0.5) + ", p90 " + quantile(drops, 0.9) + " | endless " + (100 * endless / RUNS).toFixed(0) + "%" +
             "   (" + ((Date.now() - t0) / 1000).toFixed(0) + "s)");
         return;
