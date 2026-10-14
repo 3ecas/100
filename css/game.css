@@ -481,9 +481,9 @@
        distance from the title above and the buttons below */
     min-height: 2.9em;
     margin: 0;
-    /* raised a touch: the title's box holds room for descenders its letters
-       mostly lack, so measured by the ink the gap above ran 3px wider */
-    transform: translateY(-3px);
+    /* raised, closer to the title than to the grid, so it reads with the
+       title as one block above the grid */
+    transform: translateY(-8px);
     font-size: 0.8rem;
     color: rgba(255, 255, 255, 0.82);
 }
