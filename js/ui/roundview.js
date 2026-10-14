@@ -121,13 +121,7 @@ window.Game = window.Game || {};
                 });
             }
 
-            if (restartBtn) {
-                // what the second tap does, shown under the button once armed
-                restartBtn.insertAdjacentHTML("beforeend",
-                    '<span class="tool__say words" aria-hidden="true">' +
-                    Game.Icons.words(restartBtn.getAttribute("data-confirm")) + "</span>");
-                restartBtn.addEventListener("click", startOver);
-            }
+            if (restartBtn) restartBtn.addEventListener("click", startOver);
 
             Game.Events.on("game:started", function () {
                 disarm();
