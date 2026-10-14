@@ -175,9 +175,9 @@ window.Game = window.Game || {};
             '<button type="button" class="how__shut" id="howShut" data-icon="close" ' +
             'aria-label="Close"></button>' +
             '<div class="how__card" role="dialog" aria-modal="true" aria-label="How to play">' +
-            '<div class="how__stage" id="howStage"></div>' +
             '<h2 class="how__title words" id="howTitle"></h2>' +
             '<p class="how__line words" id="howLine"></p>' +
+            '<div class="how__stage" id="howStage"></div>' +
             '<div class="how__acts">' +
             '<button type="button" class="how__skip words" id="howSkip"></button>' +
             '<button type="button" class="how__next words" id="howNext"></button>' +
